@@ -3,15 +3,15 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 exports.login = (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  const { correo, clave } = req.body;
+  if (!correo || !clave) return res.status(400).json({ error: "Todos los campos son obligatorios" });
 
-  const sql = "SELECT * FROM usuarios WHERE email = ?";
-  db.query(sql, [email], async (err, results) => {
-    if (err || results.length === 0) return res.status(401).json({ error: "Email no registrado" });
+  const sql = "SELECT * FROM usuarios WHERE correo = ?";
+  db.query(sql, [correo], async (err, results) => {
+    if (err || results.length === 0) return res.status(401).json({ error: "Correo no registrado" });
 
     const user = results[0];
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(clave, user.clave);
     if (!isMatch) return res.status(401).json({ error: "Contraseña incorrecta" });
 
     const token = jwt.sign({ id: user.id, name: user.nombre }, process.env.JWT_SECRET, { expiresIn: "10m" });

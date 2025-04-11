@@ -5,7 +5,15 @@ const cors = require("cors");
 //obtengo mis rutas
 const authRoutes = require("./routes/auth.routes");
 const usuarioRoutes = require("./routes/usuario.routes");
-const personaRoutes = require("./routes/persona.routes");
+const clienteRoutes = require("./routes/cliente.routes");
+const configuracionRoutes = require("./routes/configuracion.routes");
+const detalleplanRoutes = require("./routes/detalle_plan.routes");
+const entrenadorRoutes = require("./routes/entrenador.routes");
+const pagosplanRoutes = require("./routes/pagos_plan.routes");
+const planRoutes = require("./routes/plan.routes");
+const rutinaRoutes = require("./routes/rutina.routes");
+
+
 
 const app = express();
 app.use(cors());
@@ -17,7 +25,13 @@ app.get("/", (_req,res) => {
 
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", usuarioRoutes);
-app.use("/api/v1", personaRoutes);
+app.use("/api/v1", clienteRoutes);
+app.use("/api/v1", configuracionRoutes);
+app.use("/api/v1", detalleplanRoutes);
+app.use("/api/v1", entrenadorRoutes);
+app.use("/api/v1", pagosplanRoutes);
+app.use("/api/v1", planRoutes);
+app.use("/api/v1", rutinaRoutes);
 
 
 const PORT = process.env.PORT || 3000;
