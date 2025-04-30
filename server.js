@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 //obtengo mis rutas
+const asistenciaRoutes = require("./routes/asistencia.routes");
 const authRoutes = require("./routes/auth.routes");
 const usuarioRoutes = require("./routes/usuario.routes");
 const clienteRoutes = require("./routes/cliente.routes");
@@ -23,6 +24,7 @@ app.get("/", (_req,res) => {
   res.send("BIENVENIDO AL API");
 });
 
+app.use("/api/v1", asistenciaRoutes);
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", usuarioRoutes);
 app.use("/api/v1", clienteRoutes);
