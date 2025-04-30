@@ -18,7 +18,7 @@ exports.login = (req, res) => {
     res.status(200).json({ 
         message: "Login exitoso", 
         token: token,
-        user: { id: user.id, nombre: user.nombre } //modifique: nombre del usuario
+        // user: { id: user.id, nombre: user.nombre } //modifique: nombre del usuario
       });
   });
 };
