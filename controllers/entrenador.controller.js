@@ -2,14 +2,22 @@ const db = require("../config/database");
 
 // Crear entrenador
 exports.createEntrenador = (req, res) => {
-  const { nombre, apellido, telefono, correo, direccion, estado } = req.body;
-  if (!nombre || !apellido || !telefono || !correo || !direccion || !estado) return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  const { nombre, apellido, telefono, correo, direccion } = req.body;
+  const estado = 1; // por defecto activo
 
-  db.query("INSERT INTO entrenador (nombre, apellido, telefono, correo, direccion, estado) VALUES (?, ?, ?, ?, ?, ?)", [nombre, apellido, telefono, correo, direccion, estado], (err, result) => {
-    if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    res.status(201).json({ message: "Entrenador creado", id: result.insertId });
-  });
+  if (!nombre || !apellido || !telefono || !correo || !direccion)
+    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+
+  db.query(
+    "INSERT INTO entrenador (nombre, apellido, telefono, correo, direccion, estado) VALUES (?, ?, ?, ?, ?, ?)",
+    [nombre, apellido, telefono, correo, direccion, estado],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: "Error en la base de datos" });
+      res.status(201).json({ message: "Entrenador creado", id: result.insertId });
+    }
+  );
 };
+
 
 // Obtener todas las entrenadores
 exports.getEntrenadores = (_req, res) => {

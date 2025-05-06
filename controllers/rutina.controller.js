@@ -2,14 +2,24 @@ const db = require("../config/database");
 
 // Crear rutina
 exports.createRutina = (req, res) => {
-  const { dia, descripcion, id_user, estado } = req.body;
-  if (!dia || !descripcion || !id_user || !estado) return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  const { dia, descripcion } = req.body;
+  const id_user = req.user?.id; // Suponiendo que el middleware de autenticación agrega el usuario aquí
+  const estado = 1; // Siempre activo por defecto
 
-  db.query("INSERT INTO rutinas (dia, descripcion, id_user, estado) VALUES (?, ?, ?, ?)", [dia, descripcion, id_user, estado], (err, result) => {
-    if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    res.status(201).json({ message: "Rutina creada", id: result.insertId });
-  });
+  if (!dia || !descripcion || !id_user) {
+    return res.status(400).json({ error: "Día, descripción y usuario son obligatorios" });
+  }
+
+  db.query(
+    "INSERT INTO rutinas (dia, descripcion, id_user, estado) VALUES (?, ?, ?, ?)",
+    [dia, descripcion, id_user, estado],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: "Error en la base de datos" });
+      res.status(201).json({ message: "Rutina creada", id: result.insertId });
+    }
+  );
 };
+
 
 // Obtener todas las rutinas
 exports.getRutinas = (_req, res) => {

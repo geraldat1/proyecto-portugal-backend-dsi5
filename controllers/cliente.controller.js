@@ -2,13 +2,27 @@ const db = require("../config/database");
 
 // Crear cliente
 exports.createCliente = (req, res) => {
-  const { dni, nombre, telefono, direccion, fecha, estado, id_user } = req.body;
-  if (!dni || !nombre || !telefono || !direccion || !fecha || !estado || !id_user) return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  const { dni, nombre, telefono, direccion } = req.body;
 
-  db.query("INSERT INTO clientes (dni, nombre, telefono, direccion, fecha, estado, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)", [dni, nombre, telefono, direccion, fecha, estado, id_user], (err, result) => {
-    if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    res.status(201).json({ message: "Cliente creado", id: result.insertId });
-  });
+  // Validación de campos obligatorios
+  if (!dni || !nombre || !telefono || !direccion) {
+    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  }
+
+  // Campos automáticos
+  const fecha = new Date(); // Fecha actual
+  const estado = 1;         // Estado activo
+  const id_user = req.user.id; // ID del usuario autenticado
+
+  db.query(
+    "INSERT INTO clientes (dni, nombre, telefono, direccion, fecha, estado, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    [dni, nombre, telefono, direccion, fecha, estado, id_user],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: "Error en la base de datos" });
+
+      res.status(201).json({ message: "Cliente creado", id: result.insertId });
+    }
+  );
 };
 
 // Obtener todas las clientes

@@ -21,8 +21,8 @@ exports.getAsistencias = (_req, res) => {
 
 // Obtener asistencia por ID
 exports.getAsistenciaById = (req, res) => {
-  const { id } = req.params;
-  db.query("SELECT * FROM asistencias WHERE id = ?", [id], (err, results) => {
+  const { id_asistencia } = req.params;
+  db.query("SELECT * FROM asistencias WHERE id_asistencia = ?", [id_asistencia], (err, results) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (results.length === 0) return res.status(404).json({ error: "Asistencia no encontrada" });
 
@@ -32,11 +32,11 @@ exports.getAsistenciaById = (req, res) => {
 
 // Actualizar asistencia por ID
 exports.updateAsistencia = (req, res) => {
-  const { id } = req.params;
+  const { id_asistencia } = req.params;
   const { fecha, hora_entrada, hora_salida, id_cliente, id_entrenador, id_usuario, estado } = req.body;
   if (!fecha || !hora_entrada || !hora_salida || !id_cliente || !id_entrenador || !id_usuario || !estado) return res.status(400).json({ error: "Todos los campos son obligatorios" });
 
-  db.query("UPDATE asistencias SET fecha = ?, hora_entrada = ?, hora_salida = ?, id_cliente = ?, id_entrenador = ?, id_usuario = ?, estado = ? WHERE id = ?", [fecha, hora_entrada, hora_salida, id_cliente, id_entrenador, id_usuario, estado, id], (err, result) => {
+  db.query("UPDATE asistencias SET fecha = ?, hora_entrada = ?, hora_salida = ?, id_cliente = ?, id_entrenador = ?, id_usuario = ?, estado = ? WHERE id_asistencia = ?", [fecha, hora_entrada, hora_salida, id_cliente, id_entrenador, id_usuario, estado, id_asistencia], (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (result.affectedRows === 0) return res.status(404).json({ error: "Asistencia no encontrada" });
 
@@ -46,8 +46,8 @@ exports.updateAsistencia = (req, res) => {
 
 // Eliminar asistencia por ID
 exports.deleteAsistencia = (req, res) => {
-  const { id } = req.params;
-  db.query("DELETE FROM asistencias WHERE id = ?", [id], (err, result) => {
+  const { id_asistencia } = req.params;
+  db.query("DELETE FROM asistencias WHERE id_asistencia = ?", [id_asistencia], (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (result.affectedRows === 0) return res.status(404).json({ error: "Asistencia no encontrada" });
 

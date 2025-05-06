@@ -2,12 +2,24 @@ const db = require("../config/database");
 
 // Crear plan
 exports.createPlan = (req, res) => {
-  const { plan, descripcion, precio_plan, condicion, imagen, estado, id_user } = req.body;
-  if (!plan || !descripcion || !precio_plan || !condicion || !imagen || !estado || !id_user) return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  const { plan, descripcion, precio_plan, condicion, imagen } = req.body;
 
-  db.query("INSERT INTO planes (plan, descripcion, precio_plan, condicion, imagen, estado, id_user) VALUES (?, ?, ?, ?, ?, ?, ?)", [plan, descripcion, precio_plan, condicion, imagen, estado, id_user], (err, result) => {
+  // Suponiendo que el middleware de autenticación añadió `req.user`
+  const id_user = req.user?.id;
+  const estado = 1; // Activo por defecto
+
+  if (!plan || !descripcion || !precio_plan || !condicion || !imagen || !id_user)
+    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+
+  const query = `
+    INSERT INTO planes (plan, descripcion, precio_plan, condicion, imagen, estado, id_user)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  const values = [plan, descripcion, precio_plan, condicion, imagen, estado, id_user];
+
+  db.query(query, values, (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    res.status(201).json({ message: "Plan creada", id: result.insertId });
+    res.status(201).json({ message: "Plan creado", id: result.insertId });
   });
 };
 
