@@ -47,16 +47,29 @@ exports.getClienteById = (req, res) => {
 // Actualizar cliente por ID
 exports.updateCliente = (req, res) => {
   const { id } = req.params;
-  const { dni, nombre, telefono, direccion, fecha, estado, id_user } = req.body;
-  if (!dni || !nombre || !telefono || !direccion || !fecha || !estado || !id_user) return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  const { dni, nombre, telefono, direccion, estado } = req.body;
 
-  db.query("UPDATE clientes SET dni = ?, nombre = ?, telefono = ?, direccion = ?, fecha = ?, estado = ?, id_user = ? WHERE id = ?", [dni, nombre, telefono, direccion, fecha, estado, id_user, id], (err, result) => {
-    if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    if (result.affectedRows === 0) return res.status(404).json({ error: "Cliente no encontrado" });
+  // Validación de campos obligatorios (ya no se incluye 'fecha' porque la generamos aquí)
+  if (!dni || !nombre || !telefono || !direccion || estado === undefined) {
+    return res.status(400).json({ error: "Todos los campos son obligatorios" });
+  }
 
-    res.status(200).json({ message: "Cliente actualizado" });
-  });
+  // Obtener fecha actual
+  const fecha = new Date(); // Fecha actual automática
+  const id_user = req.user.id; // Usuario autenticado
+
+  db.query(
+    "UPDATE clientes SET dni = ?, nombre = ?, telefono = ?, direccion = ?, fecha = ?, estado = ?, id_user = ? WHERE id = ?",
+    [dni, nombre, telefono, direccion, fecha, estado, id_user, id],
+    (err, result) => {
+      if (err) return res.status(500).json({ error: "Error en la base de datos" });
+      if (result.affectedRows === 0) return res.status(404).json({ error: "Cliente no encontrado" });
+
+      res.status(200).json({ message: "Cliente actualizado" });
+    }
+  );
 };
+
 
 // Eliminar cliente por ID
 exports.deleteCliente= (req, res) => {
