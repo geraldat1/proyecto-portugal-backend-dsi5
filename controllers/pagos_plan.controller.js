@@ -1,6 +1,5 @@
 const db = require("../config/database");
 
-// Crear pagos plan
 exports.createPagosPlan = (req, res) => {
   const { id_detalle, id_cliente, id_plan, precio } = req.body;
 
@@ -11,26 +10,21 @@ exports.createPagosPlan = (req, res) => {
 
   // Obtener fecha y hora actuales
   const ahora = new Date();
-  const fecha = ahora.toISOString().slice(0, 10);           // Fecha: YYYY-MM-DD
-  const hora = ahora.toTimeString().slice(0, 8);            // Hora: HH:mm:ss
+  const fecha = ahora.toISOString().slice(0, 10); // Fecha: YYYY-MM-DD
+  const hora = ahora.toTimeString().slice(0, 8);   // Hora: HH:mm:ss
 
-  // Obtener id_user del usuario autenticado
-  const id_user = req.user.id; 
+  const id_user = req.user.id;  // Este campo es el ID del usuario autenticado
 
-  // Estado: 1 (activo)
-  const estado = 1;
-
-  // Realizar la consulta a la base de datos para insertar el pago
+  // Realiza la consulta a la base de datos
   db.query(
     "INSERT INTO pagos_planes (id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-    [id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, estado], 
+    [id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, 1], // estado 1 es activo
     (err, result) => {
       if (err) return res.status(500).json({ error: "Error en la base de datos" });
       res.status(201).json({ message: "Pago plan creado", id: result.insertId });
     }
   );
 };
-
 
 // Obtener todas las pagos planes
 exports.getPagosPlanes = (_req, res) => {

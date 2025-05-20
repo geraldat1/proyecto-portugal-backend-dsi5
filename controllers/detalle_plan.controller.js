@@ -46,12 +46,18 @@ exports.getDetallePlanes = (_req, res) => {
   });
 };
 
-// Obtener detalle_plan por ID, incluyendo nombre del cliente y nombre del plan
+// Obtener detalle_plan por ID, incluyendo nombre del cliente, nombre del plan y precio del plan
 exports.getDetallePlanById = (req, res) => {
   const { id } = req.params;
 
   const query = `
-    SELECT dp.id, c.nombre AS cliente, p.plan AS plan, dp.fecha_inicio, dp.fecha_fin
+    SELECT 
+      dp.id, 
+      c.nombre AS cliente, 
+      p.plan AS plan, 
+      p.precio_plan,           -- ✅ Incluido aquí
+      dp.fecha_inicio, 
+      dp.fecha_fin
     FROM detalle_planes dp
     INNER JOIN clientes c ON dp.id_cliente = c.id
     INNER JOIN planes p ON dp.id_plan = p.id

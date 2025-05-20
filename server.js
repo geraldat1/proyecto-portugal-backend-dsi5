@@ -14,8 +14,6 @@ const pagosplanRoutes = require("./routes/pagos_plan.routes");
 const planRoutes = require("./routes/plan.routes");
 const rutinaRoutes = require("./routes/rutina.routes");
 
-
-
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -34,7 +32,6 @@ app.use("/api/v1", entrenadorRoutes);
 app.use("/api/v1", pagosplanRoutes);
 app.use("/api/v1", planRoutes);
 app.use("/api/v1", rutinaRoutes);
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
