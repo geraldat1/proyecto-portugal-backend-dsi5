@@ -26,24 +26,47 @@ exports.createPagosPlan = (req, res) => {
   );
 };
 
-// Obtener todas las pagos planes
+// Obtener todas las pagos planes con nombres de cliente y plan
 exports.getPagosPlanes = (_req, res) => {
-  db.query("SELECT * FROM pagos_planes", (err, results) => {
+  const query = `
+    SELECT 
+      pagos_planes.*, 
+      clientes.nombre AS nombre_cliente,
+      planes.plan AS nombre_plan
+    FROM pagos_planes
+    JOIN clientes ON pagos_planes.id_cliente = clientes.id
+    JOIN planes ON pagos_planes.id_plan = planes.id
+  `;
+
+  db.query(query, (err, results) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     res.status(200).json(results);
   });
 };
 
-// Obtener pagos plan por ID
+
+// Obtener pagos plan por ID (con nombre de cliente y nombre del plan)
 exports.getPagosPlanById = (req, res) => {
   const { id } = req.params;
-  db.query("SELECT * FROM pagos_planes WHERE id = ?", [id], (err, results) => {
+  const query = `
+    SELECT 
+      pagos_planes.*, 
+      clientes.nombre AS nombre_cliente,
+      planes.plan AS nombre_plan
+    FROM pagos_planes
+    JOIN clientes ON pagos_planes.id_cliente = clientes.id
+    JOIN planes ON pagos_planes.id_plan = planes.id
+    WHERE pagos_planes.id = ?
+  `;
+
+  db.query(query, [id], (err, results) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    if (results.length === 0) return res.status(404).json({ error: "Pagos planes no encontrada" });
+    if (results.length === 0) return res.status(404).json({ error: "Pago de plan no encontrado" });
 
     res.status(200).json(results[0]);
   });
 };
+
 
 // Actualizar pagos plan por ID
 exports.updatePagosPlan = (req, res) => {
