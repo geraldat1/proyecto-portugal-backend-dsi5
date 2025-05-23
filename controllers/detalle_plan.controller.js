@@ -8,12 +8,10 @@ exports.createDetallePlan = (req, res) => {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
 
-  // Obtener fecha y hora actuales en zona horaria local
-  const ahora = new Date();
-  const fecha = ahora.toISOString().slice(0, 10);           // Fecha: YYYY-MM-DD (UTC, usualmente aceptable)
-  const hora = ahora.toTimeString().slice(0, 8);            // Hora local: HH:mm:ss
+  // Fecha y hora locales (con objeto Date directo)
+  const fecha = new Date(); // ✅ Evita problemas con zona horaria
 
-  // Verifica que haya usuario autenticado
+  // Verifica usuario autenticado
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: "Usuario no autenticado" });
   }
@@ -25,6 +23,8 @@ exports.createDetallePlan = (req, res) => {
     INSERT INTO detalle_planes 
     (id_cliente, id_plan, fecha, hora, fecha_venc, fecha_limite, id_user, estado)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  const hora = fecha.toTimeString().slice(0, 8); // HH:mm:ss
 
   const values = [id_cliente, id_plan, fecha, hora, fecha_venc, fecha_limite, id_user, estado];
 
@@ -46,7 +46,7 @@ exports.getDetallePlanes = (_req, res) => {
   });
 };
 
-// Obtener detalle_plan por ID, incluyendo nombre del cliente, nombre del plan y precio del plan
+// Obtener detalle_plan por ID (con datos del cliente y plan)
 exports.getDetallePlanById = (req, res) => {
   const { id } = req.params;
 
@@ -55,9 +55,9 @@ exports.getDetallePlanById = (req, res) => {
       dp.id, 
       c.nombre AS cliente, 
       p.plan AS plan, 
-      p.precio_plan,           -- ✅ Incluido aquí
-      dp.fecha_inicio, 
-      dp.fecha_fin
+      p.precio_plan, 
+      dp.fecha AS fecha_inicio, 
+      dp.fecha_venc AS fecha_fin
     FROM detalle_planes dp
     INNER JOIN clientes c ON dp.id_cliente = c.id
     INNER JOIN planes p ON dp.id_plan = p.id
@@ -77,20 +77,16 @@ exports.updateDetallePlan = (req, res) => {
   const { id } = req.params;
   const { id_cliente, id_plan, fecha_venc, fecha_limite, estado } = req.body;
 
-  // Verifica campos obligatorios
-  if (!id_cliente || !id_plan || !fecha_venc || !fecha_limite || !estado) {
+  if (!id_cliente || !id_plan || !fecha_venc || !fecha_limite || estado === undefined) {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
 
-  // Validar que el usuario esté autenticado
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: "Usuario no autenticado" });
   }
 
-  // Obtener fecha y hora actual
-  const ahora = new Date();
-  const fecha = ahora.toISOString().slice(0, 10); // YYYY-MM-DD
-  const hora = ahora.toTimeString().slice(0, 8);  // HH:mm:ss
+  const fecha = new Date(); // ✅ Fecha actual como objeto Date
+  const hora = fecha.toTimeString().slice(0, 8); // HH:mm:ss
   const id_user = req.user.id;
 
   const sql = `
@@ -113,7 +109,6 @@ exports.updateDetallePlan = (req, res) => {
     res.status(200).json({ message: "Detalle plan actualizado correctamente" });
   });
 };
-
 
 // Eliminar detalle plan por ID
 exports.deleteDetallePlan = (req, res) => {

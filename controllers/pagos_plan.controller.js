@@ -26,12 +26,14 @@ exports.createPagosPlan = (req, res) => {
   );
 };
 
+
 // Obtener todas las pagos planes con nombres de cliente y plan
 exports.getPagosPlanes = (_req, res) => {
   const query = `
     SELECT 
       pagos_planes.*, 
       clientes.nombre AS nombre_cliente,
+      clientes.dni AS dni_cliente,
       planes.plan AS nombre_plan
     FROM pagos_planes
     JOIN clientes ON pagos_planes.id_cliente = clientes.id
@@ -52,6 +54,7 @@ exports.getPagosPlanById = (req, res) => {
     SELECT 
       pagos_planes.*, 
       clientes.nombre AS nombre_cliente,
+      clientes.dni AS dni_cliente,
       planes.plan AS nombre_plan
     FROM pagos_planes
     JOIN clientes ON pagos_planes.id_cliente = clientes.id
