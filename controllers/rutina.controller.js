@@ -54,13 +54,14 @@ exports.updateRutina = (req, res) => {
   });
 };
 
-// Eliminar rutina por ID
+// Desactivar rutina por ID (cambiar estado a 0)
 exports.deleteRutina = (req, res) => {
   const { id } = req.params;
-  db.query("DELETE FROM rutinas WHERE id = ?", [id], (err, result) => {
+  db.query("UPDATE rutinas SET estado = 0 WHERE id = ?", [id], (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (result.affectedRows === 0) return res.status(404).json({ error: "Rutina no encontrada" });
 
-    res.status(200).json({ message: "Rutina eliminada" });
+    res.status(200).json({ message: "Rutina desactivada" });
   });
 };
+

@@ -2,40 +2,70 @@ const db = require("../config/database");
 
 // Crear Asistencia
 exports.createAsistencia = (req, res) => {
-  const { id_cliente, id_entrenador, id_rutina } = req.body;
+  const { id_detalle, id_entrenador } = req.body;
 
-  // Validar campos obligatorios
-  if (!id_cliente || !id_entrenador || !id_rutina) {
-    return res.status(400).json({ error: "id_cliente, id_entrenador e id_rutina son obligatorios" });
+  // Validación más robusta
+  if (!id_detalle || !id_entrenador) {
+    return res.status(400).json({ 
+      error: "Datos incompletos",
+      details: {
+        id_detalle: !id_detalle ? "Falta id_detalle" : null,
+        id_entrenador: !id_entrenador ? "Falta id_entrenador" : null
+      }
+    });
   }
 
   if (!req.user || !req.user.id) {
-    return res.status(401).json({ error: "Usuario no autenticado" });
+    return res.status(401).json({ 
+      error: "No autorizado",
+      details: "Usuario no autenticado o token inválido"
+    });
   }
 
-  const fecha = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const hora_entrada = new Date().toTimeString().slice(0, 8); // HH:mm:ss
+  const fecha = new Date().toISOString().slice(0, 10);
+  const hora_entrada = new Date().toTimeString().slice(0, 8);
   const hora_salida = null;
   const id_usuario = req.user.id;
   const estado = 1;
 
   const sql = `
-    INSERT INTO asistencias (fecha, hora_entrada, hora_salida, id_cliente, id_entrenador, id_rutina, id_usuario, estado)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO asistencias 
+    (fecha, hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
 
-  const values = [fecha, hora_entrada, hora_salida, id_cliente, id_entrenador, id_rutina, id_usuario, estado];
+  const values = [fecha, hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado];
 
   db.query(sql, values, (err, result) => {
     if (err) {
       console.error("Error en la base de datos:", err);
-      return res.status(500).json({ error: "Error en la base de datos" });
+      
+      // Manejo específico de errores comunes
+      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+        return res.status(400).json({ 
+          error: "Datos inválidos",
+          details: "El id_detalle o id_entrenador no existe en la base de datos"
+        });
+      }
+      
+      return res.status(500).json({ 
+        error: "Error en la base de datos",
+        details: err.message 
+      });
     }
 
-    res.status(201).json({ message: "Asistencia creada", id: result.insertId });
+    res.status(201).json({ 
+      message: "Asistencia creada", 
+      id: result.insertId,
+      data: {
+        fecha,
+        hora_entrada,
+        id_detalle,
+        id_entrenador
+      }
+    });
   });
 };
-
 
 // Obtener todas las asistencias
 exports.getAsistencias = (_req, res) => {
@@ -45,39 +75,59 @@ exports.getAsistencias = (_req, res) => {
   });
 };
 
-// Obtener asistencia por ID
+//Obtener asistencia por ID (corregido)
 exports.getAsistenciaById = (req, res) => {
   const { id_asistencia } = req.params;
-  db.query("SELECT * FROM asistencias WHERE id_asistencia = ?", [id_asistencia], (err, results) => {
-    if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    if (results.length === 0) return res.status(404).json({ error: "Asistencia no encontrada" });
+  console.log("Buscando asistencia con ID:", id_asistencia);
+
+  const query = `
+    SELECT 
+      a.*, 
+      c.nombre AS nombre_cliente, 
+      p.plan AS nombre_plan, 
+      e.nombre AS nombre_entrenador
+    FROM asistencias a
+    INNER JOIN detalle_planes dp ON a.id_detalle = dp.id
+    INNER JOIN clientes c ON dp.id_cliente = c.id
+    INNER JOIN planes p ON dp.id_plan = p.id
+    INNER JOIN entrenador e ON a.id_entrenador = e.id
+    WHERE a.id_asistencia = ?
+  `;
+
+  db.query(query, [id_asistencia], (err, results) => {
+    if (err) {
+      console.error("Error en la base de datos:", err);
+      return res.status(500).json({ error: "Error en la base de datos" });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Asistencia no encontrada" });
+    }
 
     res.status(200).json(results[0]);
   });
 };
 
-// Actualizar asistencia por ID
+
+// Actualizar asistencia
 exports.updateAsistencia = (req, res) => {
   const { id_asistencia } = req.params;
-  
-  // Obtener la fecha actual y la hora de salida
-  const fecha = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-  const hora_salida = new Date().toTimeString().slice(0, 8); // HH:mm:ss
-  const id_usuario = req.user.id; // Obtener el id del usuario autenticado
-  const estado = 0; // Estado cambiado a 0
-  
-  // Obtener los datos enviados en el cuerpo de la solicitud
-  const { hora_entrada, id_cliente, id_entrenador } = req.body;
 
-  // Validar campos obligatorios
-  if (!hora_entrada || !id_cliente || !id_entrenador) {
-    return res.status(400).json({ error: "hora_entrada, id_cliente, y id_entrenador son obligatorios" });
+  const hora_salida = new Date().toTimeString().slice(0, 8);
+  const id_usuario = req.user.id;
+  const estado = 0;
+
+  const { hora_entrada, id_detalle, id_entrenador } = req.body;
+
+  if (!hora_entrada || !id_detalle || !id_entrenador) {
+    return res.status(400).json({ error: "hora_entrada, id_detalle, y id_entrenador son obligatorios" });
   }
 
-  // Consultar la base de datos para actualizar la asistencia
+  // Actualizar sin modificar la fecha
   db.query(
-    "UPDATE asistencias SET fecha = ?, hora_entrada = ?, hora_salida = ?, id_cliente = ?, id_entrenador = ?, id_usuario = ?, estado = ? WHERE id_asistencia = ?",
-    [fecha, hora_entrada, hora_salida, id_cliente, id_entrenador, id_usuario, estado, id_asistencia],
+    `UPDATE asistencias 
+     SET hora_entrada = ?, hora_salida = ?, id_detalle = ?, id_entrenador = ?, id_usuario = ?, estado = ? 
+     WHERE id_asistencia = ?`,
+    [hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado, id_asistencia],
     (err, result) => {
       if (err) return res.status(500).json({ error: "Error en la base de datos" });
       if (result.affectedRows === 0) return res.status(404).json({ error: "Asistencia no encontrada" });
@@ -88,9 +138,10 @@ exports.updateAsistencia = (req, res) => {
 };
 
 
-// Eliminar asistencia por ID
+// Eliminar asistencia
 exports.deleteAsistencia = (req, res) => {
   const { id_asistencia } = req.params;
+
   db.query("DELETE FROM asistencias WHERE id_asistencia = ?", [id_asistencia], (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (result.affectedRows === 0) return res.status(404).json({ error: "Asistencia no encontrada" });

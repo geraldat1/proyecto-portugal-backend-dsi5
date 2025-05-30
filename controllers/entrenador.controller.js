@@ -52,13 +52,14 @@ exports.updateEntrenador = (req, res) => {
   });
 };
 
-// Eliminar entrenador por ID
+// Deshabilitar entrenador por ID
 exports.deleteEntrenador = (req, res) => {
   const { id } = req.params;
-  db.query("DELETE FROM entrenador WHERE id = ?", [id], (err, result) => {
+  db.query("UPDATE entrenador SET estado = 0 WHERE id = ?", [id], (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (result.affectedRows === 0) return res.status(404).json({ error: "Entrenador no encontrado" });
 
-    res.status(200).json({ message: "Entrenador eliminado" });
+    res.status(200).json({ message: "Entrenador deshabilitado" });
   });
 };
+

@@ -56,13 +56,14 @@ exports.updatePlan = (req, res) => {
   });
 };
 
-// Eliminar plan por ID
+// Deshabilitar plan por ID
 exports.deletePlan = (req, res) => {
   const { id } = req.params;
-  db.query("DELETE FROM planes WHERE id = ?", [id], (err, result) => {
+  db.query("UPDATE planes SET estado = 0 WHERE id = ?", [id], (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    if (result.affectedRows === 0) return res.status(404).json({ error: "Plan no encontrada" });
+    if (result.affectedRows === 0) return res.status(404).json({ error: "Plan no encontrado" });
 
-    res.status(200).json({ message: "Plan eliminada" });
+    res.status(200).json({ message: "Plan deshabilitado" });
   });
 };
+

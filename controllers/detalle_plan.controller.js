@@ -113,10 +113,17 @@ exports.updateDetallePlan = (req, res) => {
 // Eliminar detalle plan por ID
 exports.deleteDetallePlan = (req, res) => {
   const { id } = req.params;
-  db.query("DELETE FROM detalle_planes WHERE id = ?", [id], (err, result) => {
+
+  const sql = `
+    UPDATE detalle_planes
+    SET estado = 0
+    WHERE id = ?`;
+
+  db.query(sql, [id], (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (result.affectedRows === 0) return res.status(404).json({ error: "Detalle plan no encontrada" });
 
-    res.status(200).json({ message: "Detalle plan eliminada" });
+    res.status(200).json({ message: "Detalle plan deshabilitada (estado cambiado a 0)" });
   });
 };
+
