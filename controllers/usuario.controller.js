@@ -59,40 +59,51 @@ exports.getUsuarioById = (req, res) => {
   });
 };
 
-// Actualizar usuario por ID
+// Actualizar usuario por ID - Versión modificada
 exports.updateUsuario = async (req, res) => {
   const { id } = req.params;
-  let { usuario, nombre, correo, clave, telefono, rol } = req.body;
-
-  // Validación de campos requeridos
-  if (!usuario || !nombre || !correo || !telefono || !rol) {
-    return res.status(400).json({ error: "Faltan campos obligatorios (excepto clave, foto y estado)" });
-  }
-
-  if (!['1', '2'].includes(rol)) {
-    return res.status(400).json({ error: "Rol inválido. Debe ser '1' para Administrador o '2' para Empleado" });
-  }
-
-  // Valores por defecto automáticos
-  const fecha = new Date();
-  const estado = 1;
-  const foto = "user.png";
+  const { usuario, nombre, correo, clave, telefono, rol } = req.body;
 
   try {
-    let hashedPassword = null;
-    if (clave && clave.trim() !== "") {
-      hashedPassword = await bcrypt.hash(clave, 10);
+    // MODIFICACIÓN: Si solo viene la clave (cambio de contraseña)
+    if (clave && Object.keys(req.body).length === 1) {
+      const hashedPassword = await bcrypt.hash(clave, 10);
+      
+      db.query(
+        "UPDATE usuarios SET clave = ? WHERE id = ?",
+        [hashedPassword, id],
+        (err, result) => {
+          if (err) return res.status(500).json({ error: "Error en la base de datos" });
+          if (result.affectedRows === 0) return res.status(404).json({ error: "Usuario no encontrado" });
+          
+          return res.status(200).json({ message: "Contraseña actualizada correctamente" });
+        }
+      );
+      return; // Salir temprano
     }
 
-    // Construir SQL dinámicamente
+    // Validación de campos requeridos (solo para actualización completa)
+    if (!usuario || !nombre || !correo || !telefono || !rol) {
+      return res.status(400).json({ error: "Faltan campos obligatorios" });
+    }
+
+    if (!['1', '2'].includes(rol)) {
+      return res.status(400).json({ error: "Rol inválido" });
+    }
+
+    // Resto de la lógica para actualización completa...
+    const fecha = new Date();
+    const estado = 1;
+    const foto = "user.png";
+
     let sql = `
       UPDATE usuarios
       SET usuario = ?, nombre = ?, correo = ?, telefono = ?, foto = ?, rol = ?, fecha = ?, estado = ?
     `;
-
     const params = [usuario, nombre, correo, telefono, foto, rol, fecha, estado];
 
-    if (hashedPassword) {
+    if (clave && clave.trim() !== "") {
+      const hashedPassword = await bcrypt.hash(clave, 10);
       sql += `, clave = ?`;
       params.push(hashedPassword);
     }
@@ -103,11 +114,12 @@ exports.updateUsuario = async (req, res) => {
     db.query(sql, params, (err, result) => {
       if (err) return res.status(500).json({ error: "Error en la base de datos" });
       if (result.affectedRows === 0) return res.status(404).json({ error: "Usuario no encontrado" });
-
+      
       res.status(200).json({ message: "Usuario actualizado correctamente" });
     });
+
   } catch (error) {
-    res.status(500).json({ error: "Error al procesar la contraseña" });
+    res.status(500).json({ error: "Error al procesar la solicitud" });
   }
 };
 
