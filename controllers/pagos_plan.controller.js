@@ -3,25 +3,42 @@ const db = require("../config/database");
 exports.createPagosPlan = (req, res) => {
   const { id_detalle, id_cliente, id_plan, precio } = req.body;
 
-  // Validar que los campos obligatorios estén presentes
+  // Validación de campos
   if (!id_detalle || !id_cliente || !id_plan || !precio) {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
 
-  // Obtener fecha y hora actuales
   const ahora = new Date();
-  const fecha = ahora.toISOString().slice(0, 10); // Fecha: YYYY-MM-DD
-  const hora = ahora.toTimeString().slice(0, 8);   // Hora: HH:mm:ss
+  const fecha = ahora.toISOString().slice(0, 10); // Formato: YYYY-MM-DD
+  const hora = ahora.toTimeString().slice(0, 8);  // Formato: HH:MM:SS
+  const id_user = req.user.id; // Suponiendo que usas auth y req.user existe
 
-  const id_user = req.user.id;  // Este campo es el ID del usuario autenticado
-
-  // Realiza la consulta a la base de datos
+  // Primero, insertar el nuevo pago
   db.query(
     "INSERT INTO pagos_planes (id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-    [id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, 1], // estado 1 es activo
+    [id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, 1],
     (err, result) => {
-      if (err) return res.status(500).json({ error: "Error en la base de datos" });
-      res.status(201).json({ message: "Pago plan creado", id: result.insertId });
+      if (err) return res.status(500).json({ error: "Error al crear el pago" });
+
+      // Luego de insertar, actualizar el estado del detalle_planes a 2
+      db.query(
+        "UPDATE detalle_planes SET estado = 2 WHERE id = ?",
+        [id_detalle],
+        (updateErr, updateResult) => {
+          if (updateErr) {
+            console.error("Error al actualizar el estado:", updateErr); // Muestra el error real
+            return res.status(500).json({ 
+              error: "Pago creado, pero error al actualizar el estado del detalleplan" 
+            });
+}
+
+
+          res.status(201).json({ 
+            message: "Pago creado y estado del detalleplan actualizado",
+            id: result.insertId 
+          });
+        }
+      );
     }
   );
 };

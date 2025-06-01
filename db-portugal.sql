@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-05-2025 a las 21:35:21
+-- Tiempo de generación: 01-06-2025 a las 03:37:22
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `new-2`
+-- Base de datos: `db-portugal`
 --
 
 -- --------------------------------------------------------
@@ -43,41 +43,8 @@ CREATE TABLE `asistencias` (
 --
 
 INSERT INTO `asistencias` (`id_asistencia`, `fecha`, `hora_entrada`, `hora_salida`, `id_detalle`, `id_entrenador`, `id_usuario`, `estado`) VALUES
-(1, '2025-05-27', '08:00:00', '14:01:20', 1, 1, 1, 0),
-(2, '2025-05-27', '08:30:00', '13:32:20', 2, 1, 1, 0),
-(3, '2025-05-27', '09:00:00', '14:01:23', 3, 2, 1, 0),
-(4, '2025-05-29', '09:30:00', '01:22:31', 4, 2, 1, 0),
-(5, '2025-05-29', '10:00:00', '01:22:26', 5, 3, 1, 0),
-(6, '2025-05-29', '10:30:00', '01:22:23', 6, 3, 1, 0),
-(7, '2025-05-29', '11:00:00', '01:22:20', 7, 4, 1, 0),
-(8, '2025-04-08', '11:30:00', '13:51:35', 8, 4, 1, 0),
-(9, '2025-04-09', '12:00:00', '13:51:41', 9, 5, 1, 0),
-(10, '2025-04-10', '12:30:00', '14:26:57', 10, 5, 1, 0),
-(14, '2025-05-23', '01:31:14', '14:14:59', 1, 1, 1, 0),
-(15, '2025-05-08', '01:30:49', '03:49:56', 1, 1, 1, 0),
-(17, '2025-05-08', '02:07:07', '03:48:23', 1, 1, 1, 0),
-(21, '2025-05-25', '14:30:45', '14:30:58', 1, 1, 1, 0),
-(22, '2025-05-27', '14:37:32', '14:47:01', 5, 1, 1, 0),
-(23, '2025-05-27', '15:42:29', '15:42:36', 1, 1, 1, 0),
-(24, '2025-05-28', '01:09:59', '02:49:32', 1, 1, 1, 0),
-(25, '2025-05-28', '01:14:14', '01:14:20', 2, 3, 1, 0),
-(27, '2025-05-28', '01:33:01', '01:33:13', 1, 4, 1, 0),
-(44, '2025-05-28', '14:48:09', '01:25:22', 1, 2, 1, 0),
-(45, '2025-05-28', '14:49:30', '14:49:46', 20, 9, 1, 0),
-(46, '2025-05-28', '14:58:29', '01:26:55', 3, 10, 1, 0),
-(47, '2025-05-28', '15:11:49', '15:48:21', 8, 9, 1, 0),
-(48, '2025-05-28', '15:48:02', '15:48:06', 6, 5, 1, 0),
-(49, '2025-05-28', '15:50:23', '15:50:37', 19, 7, 1, 0),
-(50, '2025-05-28', '15:55:19', NULL, 19, 10, 1, 1),
-(51, '2025-05-28', '16:50:31', '16:53:02', 7, 9, 1, 0),
-(52, '2025-05-29', '13:51:00', NULL, 21, 10, 1, 1),
-(53, '2025-05-29', '13:51:30', '14:10:34', 8, 7, 1, 0),
-(54, '2025-05-29', '13:52:01', NULL, 8, 10, 1, 1),
-(55, '2025-05-29', '13:56:15', '14:26:32', 8, 7, 1, 0),
-(56, '2025-05-29', '14:15:10', NULL, 10, 6, 1, 1),
-(57, '2025-05-29', '14:19:12', NULL, 11, 11, 1, 1),
-(58, '2025-05-29', '14:19:25', NULL, 11, 11, 1, 1),
-(59, '2025-05-29', '14:33:26', NULL, 4, 7, 1, 1);
+(1, '2025-05-27', '08:00:00', '19:03:03', 1, 1, 1, 0),
+(2, '2025-06-01', '20:17:25', NULL, 4, 4, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -106,14 +73,8 @@ INSERT INTO `clientes` (`id`, `dni`, `nombre`, `telefono`, `direccion`, `fecha`,
 (3, '23456789', 'Carlos Ruiz', '987654323', 'Jr. San Martín 890, Lima', '2025-04-29 13:28:48', 1, 1),
 (4, '34567890', 'Ana Torres', '987654324', 'Av. Javier Prado 456, Lima', '2025-04-29 13:28:48', 1, 1),
 (5, '45678901', 'Luis Fernández', '987654325', 'Calle La Paz 123, Lima', '2025-04-29 13:28:48', 1, 1),
-(6, '56789012', 'Sofía López', '987654326', 'Av. Brasil 789, Lima', '2025-04-29 13:28:48', 1, 1),
-(7, '67890123', 'Pedro Martínez', '987654327', 'Calle Los Ángeles 234, Lima', '2025-04-29 13:28:48', 1, 1),
-(8, '78901234', 'Lucía Sánchez', '987654328', 'Av. Tacna 345, Lima', '2025-04-29 13:28:48', 1, 1),
-(9, '89012345', 'Diego Morales', '987654329', 'Calle San Juan 456, Lima', '2025-04-29 13:28:48', 1, 1),
-(10, '90123456', 'Valeria Castro', '987654331', 'Av. Pardo 567, Lima', '2025-05-08 15:44:12', 1, 1),
-(18, '73069140', 'Javier Avila', '987654321', 'Jr. Tarapaca 189', '2025-05-21 20:45:42', 1, 1),
-(19, '75546570', 'Andrea Manihuari', '987654444', 'Jr. Virgen de las nieves', '2025-05-21 21:21:25', 1, 1),
-(20, '73069140', 'Gerald Avila ', '988418747', 'Jr. Salaverry 187', '2025-05-29 06:43:35', 0, 1);
+(6, '73069140', 'Gerald Javier Avila Torres', '987654321', 'Jr. Tarapaca 187', '2025-06-01 01:24:33', 1, 1),
+(7, '87654345', 'Andrea Tello', '987654323', 'Jr. Tupac Amaru', '2025-06-01 01:25:32', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -163,26 +124,16 @@ CREATE TABLE `detalle_planes` (
 --
 
 INSERT INTO `detalle_planes` (`id`, `id_cliente`, `id_plan`, `fecha`, `hora`, `fecha_venc`, `fecha_limite`, `id_user`, `estado`) VALUES
-(1, 1, 1, '2025-05-08', '13:40:48', '2026-04-01', '2026-04-23', 1, 1),
-(2, 2, 2, '2025-04-02', '08:30:00', '2026-04-02', '2026-04-12', 1, 1),
-(3, 3, 3, '2025-04-03', '09:00:00', '2026-04-03', '2026-04-15', 1, 1),
-(4, 4, 4, '2025-04-04', '09:30:00', '2026-04-04', '2026-04-20', 1, 1),
-(5, 5, 3, '2025-05-07', '15:46:22', '2026-04-05', '2026-04-25', 1, 1),
-(6, 6, 1, '2025-04-06', '10:30:00', '2026-04-06', '2026-04-30', 1, 1),
-(7, 7, 2, '2025-04-07', '11:00:00', '2026-04-07', '2026-05-05', 1, 1),
-(8, 8, 3, '2025-04-08', '11:30:00', '2026-04-08', '2026-05-10', 1, 1),
-(9, 9, 4, '2025-04-09', '12:00:00', '2026-04-09', '2026-05-15', 1, 1),
-(10, 10, 5, '2025-04-10', '12:30:00', '2026-04-10', '2026-05-20', 1, 1),
-(11, 2, 1, '2025-05-08', '01:12:43', '2025-05-06', '2025-05-21', 1, 1),
-(14, 1, 1, '2025-05-07', '00:01:02', '2025-05-07', '2025-05-08', 1, 1),
-(16, 1, 2, '2025-05-07', '15:47:01', '2025-05-15', '2025-06-25', 1, 1),
-(17, 7, 3, '2025-05-08', '15:04:47', '2025-05-09', '2025-06-26', 1, 1),
-(18, 6, 2, '2025-05-20', '14:25:51', '2025-05-23', '2025-08-01', 1, 1),
-(19, 19, 2, '2025-05-28', '15:58:54', '2025-05-28', '2025-05-29', 1, 1),
-(20, 20, 1, '2025-05-22', '20:59:25', '2025-05-23', '2025-07-23', 1, 1),
-(21, 20, 3, '2025-05-21', '21:09:52', '2025-05-23', '2025-07-24', 1, 1),
-(22, 18, 5, '2025-05-21', '21:14:16', '2025-05-24', '2025-08-28', 1, 1),
-(23, 4, 3, '2025-05-29', '01:16:00', '2025-05-29', '2025-05-31', 1, 0);
+(1, 1, 1, '2025-05-08', '13:40:48', '2026-04-01', '2026-04-23', 1, 0),
+(2, 2, 1, '2025-05-31', '19:05:19', '2025-05-31', '2025-06-07', 1, 2),
+(3, 1, 2, '2025-05-31', '19:07:50', '2025-05-31', '2025-05-31', 1, 0),
+(4, 3, 2, '2025-05-31', '19:18:45', '2025-05-31', '2025-06-07', 1, 2),
+(5, 5, 2, '2025-05-31', '19:27:54', '2025-05-31', '2025-05-31', 1, 0),
+(6, 5, 3, '2025-05-31', '19:31:08', '2025-05-31', '2025-06-07', 1, 0),
+(7, 3, 5, '2025-05-31', '19:49:20', '2025-06-01', '2025-06-06', 1, 0),
+(8, 1, 4, '2025-05-31', '19:55:47', '2025-07-01', '2025-07-06', 1, 0),
+(9, 1, 3, '2025-05-31', '19:52:01', '2025-06-20', '2025-06-25', 1, 0),
+(10, 1, 2, '2025-05-31', '20:06:10', '2025-06-30', '2025-07-05', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -205,17 +156,11 @@ CREATE TABLE `entrenador` (
 --
 
 INSERT INTO `entrenador` (`id`, `nombre`, `apellido`, `telefono`, `correo`, `direccion`, `estado`) VALUES
-(1, 'José', 'García', '987654322', 'jose.garcia@gimnasiofitness.pe', 'Av. Puno 123, Lima', 1),
+(1, 'José', 'García', '987654322', 'jose.garcia@gimnasiofitness.pe', 'Av. Puno 123, Lima', 0),
 (2, 'María', 'López', '987654322', 'maria.lopez@gimnasiofitness.pe', 'Calle Los Olivos 567, Lima', 1),
 (3, 'Carlos', 'Ramírez', '987654323', 'carlos.ramirez@gimnasiofitness.pe', 'Jr. San Martín 890, Lima', 1),
 (4, 'Ana', 'Torres', '987654324', 'ana.torres@gimnasiofitness.pe', 'Av. Javier Prado 456, Lima', 1),
-(5, 'Luis', 'Fernández', '987654325', 'luis.fernandez@gimnasiofitness.pe', 'Calle La Paz 123, Lima', 1),
-(6, 'Sofía', 'López', '987654326', 'sofia.lopez@gimnasiofitness.pe', 'Av. Brasil 789, Lima', 1),
-(7, 'Pedro', 'Martínez', '987654327', 'pedro.martinez@gimnasiofitness.pe', 'Calle Los Ángeles 234, Lima', 1),
-(8, 'Lucía', 'Sánchez', '987654328', 'lucia.sanchez@gimnasiofitness.pe', 'Av. Tacna 345, Lima', 1),
-(9, 'Diego', 'Morales', '987654329', 'diego.morales@gimnasiofitness.pe', 'Calle San Juan 456, Lima', 1),
-(10, 'Valeria', 'Castro', '987654330', 'valeria.castro@gimnasiofitness.pe', 'Av. Pardo 567, Lima', 1),
-(11, 'Javier', 'Avila', '987654322', 'gerald@gmail.com', 'Jr. Tarapaca 187', 0);
+(5, 'Luis', 'Fernández', '987654325', 'luis.fernandez@gimnasiofitness.pe', 'Calle La Paz 123, Lima', 1);
 
 -- --------------------------------------------------------
 
@@ -241,35 +186,20 @@ CREATE TABLE `pagos_planes` (
 
 INSERT INTO `pagos_planes` (`id`, `id_detalle`, `id_cliente`, `id_plan`, `precio`, `fecha`, `hora`, `id_user`, `estado`) VALUES
 (1, 2, 2, 2, 49.90, '2025-05-07', '00:47:10', 1, 1),
-(2, 2, 2, 2, 20.00, '2025-04-02', '08:30:00', 1, 1),
-(3, 3, 3, 3, 100.00, '2025-04-03', '09:00:00', 1, 1),
-(4, 4, 4, 4, 300.00, '2025-04-04', '09:30:00', 1, 1),
-(5, 5, 5, 4, 139.00, '2025-05-08', '10:17:40', 1, 1),
-(9, 1, 1, 1, 55.00, '2025-05-14', '09:12:53', 1, 1),
-(10, 1, 1, 1, 55.00, '2025-05-14', '13:26:38', 1, 1),
-(11, 2, 2, 2, 40.00, '2025-05-20', '13:24:16', 1, 1),
-(12, 5, 5, 3, 100.00, '2025-05-20', '13:39:11', 1, 1),
-(13, 17, 7, 3, 100.00, '2025-05-20', '13:39:57', 1, 1),
-(14, 11, 2, 1, 55.00, '2025-05-20', '13:41:55', 1, 1),
-(15, 5, 5, 3, 100.00, '2025-05-20', '13:55:25', 1, 1),
-(16, 17, 7, 3, 100.00, '2025-05-20', '14:01:50', 1, 1),
-(17, 17, 7, 3, 100.00, '2025-05-20', '14:02:06', 1, 1),
-(18, 17, 7, 3, 100.00, '2025-05-20', '14:02:35', 1, 1),
-(19, 5, 5, 3, 100.00, '2025-05-20', '14:18:40', 1, 1),
-(20, 18, 6, 2, 40.00, '2025-05-20', '14:26:05', 1, 1),
-(21, 5, 5, 3, 100.00, '2025-05-20', '14:40:38', 1, 1),
-(22, 11, 2, 1, 55.00, '2025-05-20', '14:42:20', 1, 1),
-(23, 5, 5, 3, 100.00, '2025-05-20', '15:00:09', 1, 1),
-(24, 18, 6, 2, 40.00, '2025-05-20', '15:36:00', 1, 1),
-(25, 19, 19, 2, 40.00, '2025-05-21', '15:46:38', 1, 1),
-(26, 19, 19, 2, 40.00, '2025-05-22', '20:51:15', 1, 1),
-(27, 19, 19, 2, 40.00, '2025-05-22', '20:52:27', 1, 1),
-(28, 17, 7, 3, 100.00, '2025-05-22', '20:52:48', 1, 1),
-(29, 20, 20, 1, 55.00, '2025-05-22', '21:09:33', 1, 1),
-(30, 21, 20, 3, 100.00, '2025-05-22', '21:13:18', 1, 1),
-(31, 21, 20, 3, 100.00, '2025-05-22', '21:13:41', 1, 1),
-(32, 18, 6, 2, 40.00, '2025-05-24', '18:48:09', 1, 1),
-(33, 22, 18, 5, 147.00, '2025-05-24', '18:55:05', 1, 1);
+(2, 1, 1, 1, 55.00, '2025-06-01', '19:03:14', 1, 1),
+(3, 2, 2, 1, 55.00, '2025-06-01', '19:05:21', 1, 1),
+(4, 2, 2, 1, 55.00, '2025-06-01', '19:07:23', 1, 1),
+(5, 4, 3, 2, 40.00, '2025-06-01', '19:22:35', 1, 1),
+(6, 4, 3, 2, 40.00, '2025-06-01', '19:23:04', 1, 1),
+(7, 2, 2, 1, 55.00, '2025-06-01', '19:23:11', 1, 1),
+(8, 2, 2, 1, 55.00, '2025-06-01', '19:28:03', 1, 1),
+(9, 4, 3, 2, 40.00, '2025-06-01', '19:28:37', 1, 1),
+(10, 4, 3, 2, 40.00, '2025-06-01', '19:28:44', 1, 1),
+(11, 2, 2, 1, 55.00, '2025-06-01', '19:28:50', 1, 1),
+(12, 6, 5, 3, 100.00, '2025-06-01', '19:31:28', 1, 1),
+(13, 6, 5, 3, 100.00, '2025-06-01', '19:34:06', 1, 1),
+(14, 4, 3, 2, 40.00, '2025-06-01', '19:34:16', 1, 1),
+(15, 2, 2, 1, 55.00, '2025-06-01', '19:34:24', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -293,12 +223,11 @@ CREATE TABLE `planes` (
 --
 
 INSERT INTO `planes` (`id`, `plan`, `descripcion`, `precio_plan`, `condicion`, `imagen`, `estado`, `id_user`) VALUES
-(1, 'Plan para adelgazar con Aerodance (8 semanas)', 'Baile y aeróbicos para quemar calorías de forma divertida y efectiva.', 55.00, 'Anual', '/imagenes/plan/plan-5.jpg', 1, 1),
-(2, 'Plan para mantenerse en forma con actividades variadas (8 semanas)', 'Aerodance, pilates, yoga, GAP y más. Actividades variadas para mantenerte activo con energía.', 40.00, 'MENSUAL', '/imagenes/plan/plan-2.jpg', 1, 1),
-(3, 'Plan para empezar (8 semanas)', 'Para quienes quieren empezar a hacer ejercicio de forma gradual y con motivación.', 100.00, 'MENSUAL', '/imagenes/plan/plan-3.jpeg', 1, 1),
+(1, 'Plan para adelgazar con Aerodance', 'Baile y aeróbicos para quemar calorías de forma divertida y efectiva.', 55.00, 'Anual', '/imagenes/plan/plan-5.jpg', 1, 1),
+(2, 'Plan para mantenerse en forma con actividades variadas', 'Aerodance, pilates, yoga, GAP y más. Actividades variadas para mantenerte activo con energía.', 40.00, 'MENSUAL', '/imagenes/plan/plan-2.jpg', 1, 1),
+(3, 'Plan para empezar', 'Para quienes quieren empezar a hacer ejercicio de forma gradual y con motivación.', 100.00, 'MENSUAL', '/imagenes/plan/plan-3.jpeg', 1, 1),
 (4, 'Reto 30 días', 'Únete al reto y ponte en forma en tiempo récord con una rutina intensa y enfocada.', 300.00, 'MENSUAL', '/imagenes/plan/plan-4.jpg', 1, 1),
-(5, 'Tonifica tu cuerpo en 4 semanas', 'Programa estructurado de 4 semanas con clases en video para esculpir y tonificar tu cuerpo paso a paso.', 147.00, 'MENSUAL', '/imagenes/plan/plan-5.jpg', 1, 1),
-(12, 'sasas', 'dadasdasd', 90.00, 'Anual', '/imagenes/plan/plan-5.jpg', 0, 1);
+(5, 'Tonifica tu cuerpo', 'Programa estructurado de 4 semanas con clases en video para esculpir y tonificar tu cuerpo paso a paso.', 147.00, 'MENSUAL', '/imagenes/plan/plan-5.jpg', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -487,13 +416,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `asistencias`
 --
 ALTER TABLE `asistencias`
-  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracion`
@@ -505,25 +434,25 @@ ALTER TABLE `configuracion`
 -- AUTO_INCREMENT de la tabla `detalle_planes`
 --
 ALTER TABLE `detalle_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `entrenador`
 --
 ALTER TABLE `entrenador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos_planes`
 --
 ALTER TABLE `pagos_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `planes`
 --
 ALTER TABLE `planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `rutinas`
@@ -570,32 +499,10 @@ ALTER TABLE `detalle_planes`
   ADD CONSTRAINT `detalle_planes_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `pagos_planes`
---
-ALTER TABLE `pagos_planes`
-  ADD CONSTRAINT `pagos_planes_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pagos_planes_ibfk_4` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id`),
-  ADD CONSTRAINT `pagos_planes_ibfk_5` FOREIGN KEY (`id_detalle`) REFERENCES `detalle_planes` (`id`),
-  ADD CONSTRAINT `pagos_planes_ibfk_6` FOREIGN KEY (`id_plan`) REFERENCES `planes` (`id`);
-
---
 -- Filtros para la tabla `planes`
 --
 ALTER TABLE `planes`
   ADD CONSTRAINT `planes_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `rutinas`
---
-ALTER TABLE `rutinas`
-  ADD CONSTRAINT `rutinas_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`);
-
---
--- Filtros para la tabla `rutina_plan`
---
-ALTER TABLE `rutina_plan`
-  ADD CONSTRAINT `rutina_plan_ibfk_1` FOREIGN KEY (`id_plan`) REFERENCES `planes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `rutina_plan_ibfk_2` FOREIGN KEY (`id_rutina`) REFERENCES `rutinas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

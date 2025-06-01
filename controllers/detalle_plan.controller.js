@@ -38,13 +38,47 @@ exports.createDetallePlan = (req, res) => {
   });
 };
 
+
+
 // Obtener todas las detalle planes
 exports.getDetallePlanes = (_req, res) => {
-  db.query("SELECT * FROM detalle_planes", (err, results) => {
-    if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    res.status(200).json(results);
+  // Obtener fecha actual en Perú en formato YYYY-MM-DD
+  const fechaHoy = new Date().toLocaleString("en-US", { timeZone: "America/Lima" });
+  const fechaObj = new Date(fechaHoy);
+  const anio = fechaObj.getFullYear();
+  const mes = String(fechaObj.getMonth() + 1).padStart(2, "0");
+  const dia = String(fechaObj.getDate()).padStart(2, "0");
+  const fechaFormateada = `${anio}-${mes}-${dia}`;
+
+  // Actualizar estado = 1 si fecha_venc < hoy
+  const actualizarVencidos = `
+    UPDATE detalle_planes
+    SET estado = 1
+    WHERE fecha_venc < ?;
+  `;
+
+  // Actualizar estado = 0 si fecha_limite = hoy
+  const actualizarLimite = `
+    UPDATE detalle_planes
+    SET estado = 0
+    WHERE fecha_limite = ?;
+  `;
+
+  db.query(actualizarVencidos, [fechaFormateada], (err) => {
+    if (err) return res.status(500).json({ error: "Error al actualizar estado vencido" });
+
+    db.query(actualizarLimite, [fechaFormateada], (err) => {
+      if (err) return res.status(500).json({ error: "Error al actualizar estado límite" });
+
+      // Obtener todos los registros luego de actualizar
+      db.query("SELECT * FROM detalle_planes", (err, results) => {
+        if (err) return res.status(500).json({ error: "Error en la base de datos" });
+        res.status(200).json(results);
+      });
+    });
   });
 };
+
 
 // Obtener detalle_plan por ID (con datos del cliente y plan)
 exports.getDetallePlanById = (req, res) => {

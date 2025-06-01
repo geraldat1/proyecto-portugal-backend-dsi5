@@ -4,9 +4,8 @@ const db = require("../config/database");
 exports.createAsistencia = (req, res) => {
   const { id_detalle, id_entrenador } = req.body;
 
-  // Validación más robusta
   if (!id_detalle || !id_entrenador) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       error: "Datos incompletos",
       details: {
         id_detalle: !id_detalle ? "Falta id_detalle" : null,
@@ -16,56 +15,75 @@ exports.createAsistencia = (req, res) => {
   }
 
   if (!req.user || !req.user.id) {
-    return res.status(401).json({ 
+    return res.status(401).json({
       error: "No autorizado",
       details: "Usuario no autenticado o token inválido"
     });
   }
 
-  const fecha = new Date().toISOString().slice(0, 10);
-  const hora_entrada = new Date().toTimeString().slice(0, 8);
-  const hora_salida = null;
-  const id_usuario = req.user.id;
-  const estado = 1;
+  const fecha = new Date().toISOString().slice(0, 10); // formato YYYY-MM-DD
 
-  const sql = `
-    INSERT INTO asistencias 
-    (fecha, hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+  // 🛑 Validar si ya existe una asistencia para ese cliente hoy
+  const checkSql = `
+    SELECT id_asistencia FROM asistencias
+    WHERE id_detalle = ? AND fecha = ?
   `;
 
-  const values = [fecha, hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado];
+  db.query(checkSql, [id_detalle, fecha], (checkErr, checkResults) => {
+    if (checkErr) {
+      return res.status(500).json({ error: "Error al verificar asistencias previas", details: checkErr.message });
+    }
 
-  db.query(sql, values, (err, result) => {
-    if (err) {
-      console.error("Error en la base de datos:", err);
-      
-      // Manejo específico de errores comunes
-      if (err.code === 'ER_NO_REFERENCED_ROW_2') {
-        return res.status(400).json({ 
-          error: "Datos inválidos",
-          details: "El id_detalle o id_entrenador no existe en la base de datos"
-        });
-      }
-      
-      return res.status(500).json({ 
-        error: "Error en la base de datos",
-        details: err.message 
+    if (checkResults.length > 0) {
+      return res.status(409).json({
+        error: "Asistencia duplicada",
+        message: "Este cliente ya registró asistencia hoy"
       });
     }
 
-    res.status(201).json({ 
-      message: "Asistencia creada", 
-      id: result.insertId,
-      data: {
-        fecha,
-        hora_entrada,
-        id_detalle,
-        id_entrenador
+    // Si no hay asistencia hoy, continuar con la inserción
+    const hora_entrada = new Date().toTimeString().slice(0, 8);
+    const hora_salida = null;
+    const id_usuario = req.user.id;
+    const estado = 1;
+
+    const insertSql = `
+      INSERT INTO asistencias 
+      (fecha, hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    const values = [fecha, hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado];
+
+    db.query(insertSql, values, (err, result) => {
+      if (err) {
+        console.error("Error en la base de datos:", err);
+        if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+          return res.status(400).json({
+            error: "Datos inválidos",
+            details: "El id_detalle o id_entrenador no existe en la base de datos"
+          });
+        }
+        return res.status(500).json({
+          error: "Error en la base de datos",
+          details: err.message
+        });
       }
+
+      res.status(201).json({
+        message: "Asistencia creada",
+        id: result.insertId,
+        data: {
+          fecha,
+          hora_entrada,
+          id_detalle,
+          id_entrenador
+        }
+      });
     });
   });
 };
+
 
 // Obtener todas las asistencias
 exports.getAsistencias = (_req, res) => {

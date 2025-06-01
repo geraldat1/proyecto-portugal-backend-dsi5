@@ -9,4 +9,6 @@ router.get("/detalleplan/:id",verifyToken, detalleplanController.getDetallePlanB
 router.put("/detalleplan/:id", verifyToken, detalleplanController.updateDetallePlan);
 router.delete("/detalleplan/:id", verifyToken, detalleplanController.deleteDetallePlan);
 
+
+
 module.exports = router;
