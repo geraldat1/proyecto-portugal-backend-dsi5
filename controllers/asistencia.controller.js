@@ -130,7 +130,7 @@ exports.getAsistenciaById = (req, res) => {
 exports.updateAsistencia = (req, res) => {
   const { id_asistencia } = req.params;
 
-  const hora_salida = new Date().toTimeString().slice(0, 8);
+  const hora_salida = new Date().toLocaleTimeString('es-PE', { hour12: false });
   const id_usuario = req.user.id;
   const estado = 0;
 

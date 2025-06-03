@@ -8,9 +8,12 @@ exports.createPagosPlan = (req, res) => {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
 
-  const ahora = new Date();
-  const fecha = ahora.toISOString().slice(0, 10); // Formato: YYYY-MM-DD
-  const hora = ahora.toTimeString().slice(0, 8);  // Formato: HH:MM:SS
+  // Obtener fecha y hora de Perú (UTC-5)
+  const ahoraPerú = new Date().toLocaleString("sv-SE", {
+    timeZone: "America/Lima"
+  });
+  
+  const [fecha, hora] = ahoraPerú.split(" ");
   const id_user = req.user.id; // Suponiendo que usas auth y req.user existe
 
   // Primero, insertar el nuevo pago
@@ -30,8 +33,7 @@ exports.createPagosPlan = (req, res) => {
             return res.status(500).json({ 
               error: "Pago creado, pero error al actualizar el estado del detalleplan" 
             });
-}
-
+          }
 
           res.status(201).json({ 
             message: "Pago creado y estado del detalleplan actualizado",
@@ -51,10 +53,13 @@ exports.getPagosPlanes = (_req, res) => {
       pagos_planes.*, 
       clientes.nombre AS nombre_cliente,
       clientes.dni AS dni_cliente,
-      planes.plan AS nombre_plan
+      planes.plan AS nombre_plan,
+      detalle_planes.fecha AS fecha_reg,
+      detalle_planes.fecha_venc
     FROM pagos_planes
     JOIN clientes ON pagos_planes.id_cliente = clientes.id
     JOIN planes ON pagos_planes.id_plan = planes.id
+    JOIN detalle_planes ON pagos_planes.id_detalle = detalle_planes.id
   `;
 
   db.query(query, (err, results) => {
@@ -62,6 +67,7 @@ exports.getPagosPlanes = (_req, res) => {
     res.status(200).json(results);
   });
 };
+
 
 
 // Obtener pagos plan por ID (con nombre de cliente y nombre del plan)
@@ -72,10 +78,13 @@ exports.getPagosPlanById = (req, res) => {
       pagos_planes.*, 
       clientes.nombre AS nombre_cliente,
       clientes.dni AS dni_cliente,
-      planes.plan AS nombre_plan
+      planes.plan AS nombre_plan,
+      detalle_planes.fecha AS fecha_reg,
+      detalle_planes.fecha_venc
     FROM pagos_planes
     JOIN clientes ON pagos_planes.id_cliente = clientes.id
     JOIN planes ON pagos_planes.id_plan = planes.id
+    JOIN detalle_planes ON pagos_planes.id_detalle = detalle_planes.id
     WHERE pagos_planes.id = ?
   `;
 
@@ -86,6 +95,7 @@ exports.getPagosPlanById = (req, res) => {
     res.status(200).json(results[0]);
   });
 };
+
 
 
 // Actualizar pagos plan por ID
