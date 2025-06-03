@@ -103,7 +103,8 @@ exports.getAsistenciaById = (req, res) => {
       a.*, 
       c.nombre AS nombre_cliente, 
       p.plan AS nombre_plan, 
-      e.nombre AS nombre_entrenador
+      e.nombre AS nombre_entrenador,
+      e.apellido AS apellido_entrenador
     FROM asistencias a
     INNER JOIN detalle_planes dp ON a.id_detalle = dp.id
     INNER JOIN clientes c ON dp.id_cliente = c.id
@@ -124,6 +125,7 @@ exports.getAsistenciaById = (req, res) => {
     res.status(200).json(results[0]);
   });
 };
+
 
 
 // Actualizar asistencia
