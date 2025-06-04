@@ -23,22 +23,29 @@ exports.login = (req, res) => {
     if (!isMatch) 
       return res.status(401).json({ error: "Contraseña incorrecta" });
 
-    // Incluir el rol en el token JWT
-    const token = jwt.sign({ 
-      id: user.id, 
-      name: user.nombre,
-      rol: user.rol   // Mantener como string '1' o '2'
-    }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    
-    res.status(200).json({ 
-      message: "Login exitoso", 
-      token: token,
-      user: { 
-        id: user.id, 
-        nombre: user.nombre,
-        rol: user.rol // También incluirlo en la respuesta del usuario
-      }
-    });
+// Incluir el rol, teléfono y usuario en el token JWT
+const token = jwt.sign({ 
+  id: user.id, 
+  name: user.nombre,
+  rol: user.rol,  // Mantener como string '1' o '2'
+  correo: user.correo,
+  telefono: user.telefono,
+  usuario: user.usuario
+}, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+res.status(200).json({ 
+  message: "Login exitoso", 
+  token: token,
+  user: { 
+    id: user.id, 
+    nombre: user.nombre,
+    rol: user.rol,
+    correo: user.correo,
+    telefono: user.telefono,
+    usuario: user.usuario
+  }
+});
+
   });
 };
 

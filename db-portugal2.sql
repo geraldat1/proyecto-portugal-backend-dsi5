@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-06-2025 a las 03:37:22
+-- Tiempo de generación: 04-06-2025 a las 11:19:24
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `db-portugal`
+-- Base de datos: `prueba-new-2`
 --
 
 -- --------------------------------------------------------
@@ -43,8 +43,11 @@ CREATE TABLE `asistencias` (
 --
 
 INSERT INTO `asistencias` (`id_asistencia`, `fecha`, `hora_entrada`, `hora_salida`, `id_detalle`, `id_entrenador`, `id_usuario`, `estado`) VALUES
-(1, '2025-05-27', '08:00:00', '19:03:03', 1, 1, 1, 0),
-(2, '2025-06-01', '20:17:25', NULL, 4, 4, 1, 1);
+(1, '2025-05-27', '08:00:00', '14:01:20', 1, 1, 1, 0),
+(2, '2025-05-27', '08:30:00', '13:32:20', 2, 1, 1, 0),
+(3, '2025-05-27', '09:00:00', '14:01:23', 3, 2, 1, 0),
+(4, '2025-05-29', '09:30:00', '01:22:31', 4, 2, 1, 0),
+(5, '2025-05-29', '10:00:00', '01:22:26', 5, 3, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -72,9 +75,7 @@ INSERT INTO `clientes` (`id`, `dni`, `nombre`, `telefono`, `direccion`, `fecha`,
 (2, '87654321', 'María Gómez', '987654321', 'Calle Los Olivos 567, Lima', '2025-05-08 15:38:49', 1, 1),
 (3, '23456789', 'Carlos Ruiz', '987654323', 'Jr. San Martín 890, Lima', '2025-04-29 13:28:48', 1, 1),
 (4, '34567890', 'Ana Torres', '987654324', 'Av. Javier Prado 456, Lima', '2025-04-29 13:28:48', 1, 1),
-(5, '45678901', 'Luis Fernández', '987654325', 'Calle La Paz 123, Lima', '2025-04-29 13:28:48', 1, 1),
-(6, '73069140', 'Gerald Javier Avila Torres', '987654321', 'Jr. Tarapaca 187', '2025-06-01 01:24:33', 1, 1),
-(7, '87654345', 'Andrea Tello', '987654323', 'Jr. Tupac Amaru', '2025-06-01 01:25:32', 1, 1);
+(5, '45678901', 'Luis Fernández', '987654325', 'Calle La Paz 123, Lima', '2025-04-29 13:28:48', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -90,7 +91,7 @@ CREATE TABLE `configuracion` (
   `telefono` varchar(15) NOT NULL,
   `direccion` varchar(200) NOT NULL,
   `mensaje` text NOT NULL,
-  `logo` varchar(10) NOT NULL,
+  `logo` varchar(100) NOT NULL,
   `limite` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -99,7 +100,7 @@ CREATE TABLE `configuracion` (
 --
 
 INSERT INTO `configuracion` (`id`, `ruc`, `nombre`, `correo`, `telefono`, `direccion`, `mensaje`, `logo`, `limite`) VALUES
-(1, '12345678909', 'ToretoGym', 'admin@gmail.com', '976664659', 'Av 9 de Octubre Jr. Manco Capac', 'Gracias por su preferencia', 'logo.png', 10);
+(1, '12345678909', 'ToretoGym', 'admin@gmail.com', '976664659', 'Av 9 de Octubre Jr. Manco Capac', 'Gracias por su preferencia', 'logo-toreto.png', 10);
 
 -- --------------------------------------------------------
 
@@ -125,15 +126,10 @@ CREATE TABLE `detalle_planes` (
 
 INSERT INTO `detalle_planes` (`id`, `id_cliente`, `id_plan`, `fecha`, `hora`, `fecha_venc`, `fecha_limite`, `id_user`, `estado`) VALUES
 (1, 1, 1, '2025-05-08', '13:40:48', '2026-04-01', '2026-04-23', 1, 0),
-(2, 2, 1, '2025-05-31', '19:05:19', '2025-05-31', '2025-06-07', 1, 2),
-(3, 1, 2, '2025-05-31', '19:07:50', '2025-05-31', '2025-05-31', 1, 0),
-(4, 3, 2, '2025-05-31', '19:18:45', '2025-05-31', '2025-06-07', 1, 2),
-(5, 5, 2, '2025-05-31', '19:27:54', '2025-05-31', '2025-05-31', 1, 0),
-(6, 5, 3, '2025-05-31', '19:31:08', '2025-05-31', '2025-06-07', 1, 0),
-(7, 3, 5, '2025-05-31', '19:49:20', '2025-06-01', '2025-06-06', 1, 0),
-(8, 1, 4, '2025-05-31', '19:55:47', '2025-07-01', '2025-07-06', 1, 0),
-(9, 1, 3, '2025-05-31', '19:52:01', '2025-06-20', '2025-06-25', 1, 0),
-(10, 1, 2, '2025-05-31', '20:06:10', '2025-06-30', '2025-07-05', 1, 1);
+(2, 2, 2, '2025-04-02', '08:30:00', '2026-04-02', '2026-04-12', 1, 0),
+(3, 3, 3, '2025-04-03', '09:00:00', '2026-04-03', '2026-04-15', 1, 1),
+(4, 4, 4, '2025-04-04', '09:30:00', '2026-04-04', '2026-04-20', 1, 0),
+(5, 5, 3, '2025-05-07', '15:46:22', '2026-04-05', '2026-04-25', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -156,11 +152,36 @@ CREATE TABLE `entrenador` (
 --
 
 INSERT INTO `entrenador` (`id`, `nombre`, `apellido`, `telefono`, `correo`, `direccion`, `estado`) VALUES
-(1, 'José', 'García', '987654322', 'jose.garcia@gimnasiofitness.pe', 'Av. Puno 123, Lima', 0),
+(1, 'José', 'García', '987654322', 'jose.garcia@gimnasiofitness.pe', 'Av. Puno 123, Lima', 1),
 (2, 'María', 'López', '987654322', 'maria.lopez@gimnasiofitness.pe', 'Calle Los Olivos 567, Lima', 1),
 (3, 'Carlos', 'Ramírez', '987654323', 'carlos.ramirez@gimnasiofitness.pe', 'Jr. San Martín 890, Lima', 1),
 (4, 'Ana', 'Torres', '987654324', 'ana.torres@gimnasiofitness.pe', 'Av. Javier Prado 456, Lima', 1),
-(5, 'Luis', 'Fernández', '987654325', 'luis.fernandez@gimnasiofitness.pe', 'Calle La Paz 123, Lima', 1);
+(5, 'Luis', 'Fernández', '987654325', 'luis.fernandez@gimnasiofitness.pe', 'Calle La Paz 123, Lima', 1),
+(6, 'Sofía', 'López', '987654326', 'sofia.lopez@gimnasiofitness.pe', 'Av. Brasil 789, Lima', 1),
+(7, 'Pedro', 'Martínez', '987654327', 'pedro.martinez@gimnasiofitness.pe', 'Calle Los Ángeles 234, Lima', 1),
+(8, 'Lucía', 'Sánchez', '987654328', 'lucia.sanchez@gimnasiofitness.pe', 'Av. Tacna 345, Lima', 1),
+(9, 'Diego', 'Morales', '987654329', 'diego.morales@gimnasiofitness.pe', 'Calle San Juan 456, Lima', 1),
+(10, 'Valeria', 'Castro', '987654330', 'valeria.castro@gimnasiofitness.pe', 'Av. Pardo 567, Lima', 1),
+(11, 'Javier', 'Avila', '987654322', 'gerald@gmail.com', 'Jr. Tarapaca 187', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `metodo_pago`
+--
+
+CREATE TABLE `metodo_pago` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `metodo_pago`
+--
+
+INSERT INTO `metodo_pago` (`id`, `nombre`) VALUES
+(1, 'Efectivo'),
+(2, 'Yape/Plin');
 
 -- --------------------------------------------------------
 
@@ -174,6 +195,7 @@ CREATE TABLE `pagos_planes` (
   `id_cliente` int(11) NOT NULL,
   `id_plan` int(11) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
+  `metodo_pago` int(11) NOT NULL DEFAULT 1,
   `fecha` date NOT NULL,
   `hora` time NOT NULL,
   `id_user` int(11) NOT NULL,
@@ -184,22 +206,12 @@ CREATE TABLE `pagos_planes` (
 -- Volcado de datos para la tabla `pagos_planes`
 --
 
-INSERT INTO `pagos_planes` (`id`, `id_detalle`, `id_cliente`, `id_plan`, `precio`, `fecha`, `hora`, `id_user`, `estado`) VALUES
-(1, 2, 2, 2, 49.90, '2025-05-07', '00:47:10', 1, 1),
-(2, 1, 1, 1, 55.00, '2025-06-01', '19:03:14', 1, 1),
-(3, 2, 2, 1, 55.00, '2025-06-01', '19:05:21', 1, 1),
-(4, 2, 2, 1, 55.00, '2025-06-01', '19:07:23', 1, 1),
-(5, 4, 3, 2, 40.00, '2025-06-01', '19:22:35', 1, 1),
-(6, 4, 3, 2, 40.00, '2025-06-01', '19:23:04', 1, 1),
-(7, 2, 2, 1, 55.00, '2025-06-01', '19:23:11', 1, 1),
-(8, 2, 2, 1, 55.00, '2025-06-01', '19:28:03', 1, 1),
-(9, 4, 3, 2, 40.00, '2025-06-01', '19:28:37', 1, 1),
-(10, 4, 3, 2, 40.00, '2025-06-01', '19:28:44', 1, 1),
-(11, 2, 2, 1, 55.00, '2025-06-01', '19:28:50', 1, 1),
-(12, 6, 5, 3, 100.00, '2025-06-01', '19:31:28', 1, 1),
-(13, 6, 5, 3, 100.00, '2025-06-01', '19:34:06', 1, 1),
-(14, 4, 3, 2, 40.00, '2025-06-01', '19:34:16', 1, 1),
-(15, 2, 2, 1, 55.00, '2025-06-01', '19:34:24', 1, 1);
+INSERT INTO `pagos_planes` (`id`, `id_detalle`, `id_cliente`, `id_plan`, `precio`, `metodo_pago`, `fecha`, `hora`, `id_user`, `estado`) VALUES
+(1, 2, 2, 2, 49.90, 1, '2025-05-07', '00:47:10', 1, 1),
+(2, 2, 2, 2, 20.00, 1, '2025-04-02', '08:30:00', 1, 1),
+(3, 3, 3, 3, 100.00, 1, '2025-04-03', '09:00:00', 1, 1),
+(4, 4, 4, 4, 300.00, 1, '2025-04-04', '09:30:00', 1, 1),
+(5, 5, 5, 4, 139.00, 1, '2025-05-08', '10:17:40', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -276,7 +288,7 @@ INSERT INTO `rutinas` (`id`, `dia`, `descripcion`, `id_user`, `estado`) VALUES
 (26, 'DIA 26', 'Cardio HIIT + Abdomen', 1, 1),
 (27, 'DIA 27', 'Entrenamiento Funcional', 1, 1),
 (28, 'DIA 28', 'Movilidad y Respiración', 1, 1),
-(29, 'DIA 29', 'Descanso Activo', 1, 1),
+(29, 'DIA 29', 'Descanso Activo', 1, 0),
 (30, 'DIA 30', 'Evaluación y Feedback del Progreso', 1, 1);
 
 -- --------------------------------------------------------
@@ -327,7 +339,9 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `correo`, `clave`, `telefono`, `foto`, `rol`, `fecha`, `estado`) VALUES
-(1, 'admin', 'admin', 'admin@gmail.com', '$2b$10$C.1k1XxH24g96q.m7/sM0equMYFOkH7YDX8saCVPEpmSJYr6gNPNK', '987654321', 'avatar.svg', '1', '2025-04-30 20:40:36', 1);
+(1, 'admin', 'admin', 'admin@gmail.com', '$2b$10$C.1k1XxH24g96q.m7/sM0equMYFOkH7YDX8saCVPEpmSJYr6gNPNK', '987654325', 'user.png', '1', '2025-06-04 08:57:37', 1),
+(2, 'gerald_empleado', 'gerald', 'gerald@gmail.com', '$2b$10$QrohKpM9aw72.7QPMBMAb.BVUuvo7kaQ20EB8hnoryuZ.Stfmt4TG', '987654311', 'user.png', '2', '2025-06-04 09:12:24', 1),
+(3, 'andrea_empleada', 'andrea del pilar', 'andrea123@gmail.com', '$2b$10$xSEuywIKgR5SbLpxI09zu.LElVyT2dD3N8xr4BqUoi/TPNiQhqSqi', '987654321', 'user.png', '2', '2025-05-30 08:08:37', 0);
 
 --
 -- Índices para tablas volcadas
@@ -371,6 +385,12 @@ ALTER TABLE `entrenador`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `metodo_pago`
+--
+ALTER TABLE `metodo_pago`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `pagos_planes`
 --
 ALTER TABLE `pagos_planes`
@@ -378,7 +398,8 @@ ALTER TABLE `pagos_planes`
   ADD KEY `id_user` (`id_user`),
   ADD KEY `id_detalle` (`id_detalle`),
   ADD KEY `id_cliente` (`id_cliente`),
-  ADD KEY `id_plan` (`id_plan`);
+  ADD KEY `id_plan` (`id_plan`),
+  ADD KEY `metodo_pago` (`metodo_pago`);
 
 --
 -- Indices de la tabla `planes`
@@ -416,13 +437,13 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `asistencias`
 --
 ALTER TABLE `asistencias`
-  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracion`
@@ -434,43 +455,49 @@ ALTER TABLE `configuracion`
 -- AUTO_INCREMENT de la tabla `detalle_planes`
 --
 ALTER TABLE `detalle_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `entrenador`
 --
 ALTER TABLE `entrenador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `metodo_pago`
+--
+ALTER TABLE `metodo_pago`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos_planes`
 --
 ALTER TABLE `pagos_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `planes`
 --
 ALTER TABLE `planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `rutinas`
 --
 ALTER TABLE `rutinas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `rutina_plan`
 --
 ALTER TABLE `rutina_plan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
@@ -499,10 +526,33 @@ ALTER TABLE `detalle_planes`
   ADD CONSTRAINT `detalle_planes_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `pagos_planes`
+--
+ALTER TABLE `pagos_planes`
+  ADD CONSTRAINT `pagos_planes_ibfk_3` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pagos_planes_ibfk_4` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id`),
+  ADD CONSTRAINT `pagos_planes_ibfk_5` FOREIGN KEY (`id_detalle`) REFERENCES `detalle_planes` (`id`),
+  ADD CONSTRAINT `pagos_planes_ibfk_6` FOREIGN KEY (`id_plan`) REFERENCES `planes` (`id`),
+  ADD CONSTRAINT `pagos_planes_ibfk_metodo_pago` FOREIGN KEY (`metodo_pago`) REFERENCES `metodo_pago` (`id`);
+
+--
 -- Filtros para la tabla `planes`
 --
 ALTER TABLE `planes`
   ADD CONSTRAINT `planes_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `rutinas`
+--
+ALTER TABLE `rutinas`
+  ADD CONSTRAINT `rutinas_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`);
+
+--
+-- Filtros para la tabla `rutina_plan`
+--
+ALTER TABLE `rutina_plan`
+  ADD CONSTRAINT `rutina_plan_ibfk_1` FOREIGN KEY (`id_plan`) REFERENCES `planes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `rutina_plan_ibfk_2` FOREIGN KEY (`id_rutina`) REFERENCES `rutinas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

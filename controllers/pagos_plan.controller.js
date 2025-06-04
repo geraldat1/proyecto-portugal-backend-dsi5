@@ -1,10 +1,10 @@
 const db = require("../config/database");
 
 exports.createPagosPlan = (req, res) => {
-  const { id_detalle, id_cliente, id_plan, precio } = req.body;
+  const { id_detalle, id_cliente, id_plan, precio, metodo_pago } = req.body;
 
   // Validación de campos
-  if (!id_detalle || !id_cliente || !id_plan || !precio) {
+  if (!id_detalle || !id_cliente || !id_plan || !precio || !metodo_pago) {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
 
@@ -14,22 +14,20 @@ exports.createPagosPlan = (req, res) => {
   });
   
   const [fecha, hora] = ahoraPerú.split(" ");
-  const id_user = req.user.id; // Suponiendo que usas auth y req.user existe
+  const id_user = req.user.id;
 
-  // Primero, insertar el nuevo pago
   db.query(
-    "INSERT INTO pagos_planes (id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-    [id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, 1],
+    "INSERT INTO pagos_planes (id_detalle, id_cliente, id_plan, precio, metodo_pago, fecha, hora, id_user, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+    [id_detalle, id_cliente, id_plan, precio, metodo_pago, fecha, hora, id_user, 1],
     (err, result) => {
       if (err) return res.status(500).json({ error: "Error al crear el pago" });
 
-      // Luego de insertar, actualizar el estado del detalle_planes a 2
       db.query(
         "UPDATE detalle_planes SET estado = 2 WHERE id = ?",
         [id_detalle],
         (updateErr, updateResult) => {
           if (updateErr) {
-            console.error("Error al actualizar el estado:", updateErr); // Muestra el error real
+            console.error("Error al actualizar el estado:", updateErr);
             return res.status(500).json({ 
               error: "Pago creado, pero error al actualizar el estado del detalleplan" 
             });
@@ -101,19 +99,17 @@ exports.getPagosPlanById = (req, res) => {
 // Actualizar pagos plan por ID
 exports.updatePagosPlan = (req, res) => {
   const { id } = req.params;
-  const { id_detalle, id_cliente, id_plan, precio, estado } = req.body;
+  const { id_detalle, id_cliente, id_plan, precio, metodo_pago, estado } = req.body;
 
   // Validación básica
-  if (!id_detalle || !id_cliente || !id_plan || !precio || estado === undefined) {
+  if (!id_detalle || !id_cliente || !id_plan || !precio || !metodo_pago || estado === undefined) {
     return res.status(400).json({ error: "Todos los campos son obligatorios" });
   }
 
-  // Obtener fecha y hora actual
   const ahora = new Date();
-  const fecha = ahora.toISOString().slice(0, 10); // YYYY-MM-DD
-  const hora = ahora.toTimeString().slice(0, 8);  // HH:mm:ss
+  const fecha = ahora.toISOString().slice(0, 10);
+  const hora = ahora.toTimeString().slice(0, 8);
 
-  // Verificar usuario autenticado
   if (!req.user || !req.user.id) {
     return res.status(401).json({ error: "Usuario no autenticado" });
   }
@@ -122,10 +118,10 @@ exports.updatePagosPlan = (req, res) => {
 
   const sql = `
     UPDATE pagos_planes 
-    SET id_detalle = ?, id_cliente = ?, id_plan = ?, precio = ?, fecha = ?, hora = ?, id_user = ?, estado = ? 
+    SET id_detalle = ?, id_cliente = ?, id_plan = ?, precio = ?, metodo_pago = ?, fecha = ?, hora = ?, id_user = ?, estado = ? 
     WHERE id = ?`;
 
-  const values = [id_detalle, id_cliente, id_plan, precio, fecha, hora, id_user, estado, id];
+  const values = [id_detalle, id_cliente, id_plan, precio, metodo_pago, fecha, hora, id_user, estado, id];
 
   db.query(sql, values, (err, result) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
