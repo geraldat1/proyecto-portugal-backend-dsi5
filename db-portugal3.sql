@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-06-2025 a las 11:19:24
+-- Tiempo de generación: 07-06-2025 a las 01:07:16
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `prueba-new-2`
+-- Base de datos: `db-portugal3`
 --
 
 -- --------------------------------------------------------
@@ -76,6 +76,28 @@ INSERT INTO `clientes` (`id`, `dni`, `nombre`, `telefono`, `direccion`, `fecha`,
 (3, '23456789', 'Carlos Ruiz', '987654323', 'Jr. San Martín 890, Lima', '2025-04-29 13:28:48', 1, 1),
 (4, '34567890', 'Ana Torres', '987654324', 'Av. Javier Prado 456, Lima', '2025-04-29 13:28:48', 1, 1),
 (5, '45678901', 'Luis Fernández', '987654325', 'Calle La Paz 123, Lima', '2025-04-29 13:28:48', 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `condicion`
+--
+
+CREATE TABLE `condicion` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `condicion`
+--
+
+INSERT INTO `condicion` (`id`, `nombre`) VALUES
+(1, 'Diario'),
+(2, 'Mensual'),
+(3, 'Trimestral'),
+(4, 'Anual'),
+(5, 'Promocion');
 
 -- --------------------------------------------------------
 
@@ -224,7 +246,7 @@ CREATE TABLE `planes` (
   `plan` varchar(255) NOT NULL,
   `descripcion` text NOT NULL,
   `precio_plan` decimal(10,2) NOT NULL,
-  `condicion` varchar(20) NOT NULL,
+  `condicion` int(11) NOT NULL,
   `imagen` varchar(50) NOT NULL DEFAULT 'default.png',
   `estado` int(11) NOT NULL DEFAULT 1,
   `id_user` int(11) NOT NULL
@@ -235,11 +257,11 @@ CREATE TABLE `planes` (
 --
 
 INSERT INTO `planes` (`id`, `plan`, `descripcion`, `precio_plan`, `condicion`, `imagen`, `estado`, `id_user`) VALUES
-(1, 'Plan para adelgazar con Aerodance', 'Baile y aeróbicos para quemar calorías de forma divertida y efectiva.', 55.00, 'Anual', '/imagenes/plan/plan-5.jpg', 1, 1),
-(2, 'Plan para mantenerse en forma con actividades variadas', 'Aerodance, pilates, yoga, GAP y más. Actividades variadas para mantenerte activo con energía.', 40.00, 'MENSUAL', '/imagenes/plan/plan-2.jpg', 1, 1),
-(3, 'Plan para empezar', 'Para quienes quieren empezar a hacer ejercicio de forma gradual y con motivación.', 100.00, 'MENSUAL', '/imagenes/plan/plan-3.jpeg', 1, 1),
-(4, 'Reto 30 días', 'Únete al reto y ponte en forma en tiempo récord con una rutina intensa y enfocada.', 300.00, 'MENSUAL', '/imagenes/plan/plan-4.jpg', 1, 1),
-(5, 'Tonifica tu cuerpo', 'Programa estructurado de 4 semanas con clases en video para esculpir y tonificar tu cuerpo paso a paso.', 147.00, 'MENSUAL', '/imagenes/plan/plan-5.jpg', 1, 1);
+(1, 'Plan para adelgazar con Aerodance', 'Baile y aeróbicos para quemar calorías de forma divertida y efectiva.', 55.00, 1, '/imagenes/plan/plan-5.jpg', 1, 1),
+(2, 'Plan para mantenerse en forma con actividades variadas', 'Aerodance, pilates, yoga, GAP y más. Actividades variadas para mantenerte activo con energía.', 40.00, 2, '/imagenes/plan/plan-2.jpg', 1, 1),
+(3, 'Plan para empezar', 'Para quienes quieren empezar a hacer ejercicio de forma gradual y con motivación.', 100.00, 5, '/imagenes/plan/plan-3.jpeg', 1, 1),
+(4, 'Reto 30 días', 'Únete al reto y ponte en forma en tiempo récord con una rutina intensa y enfocada.', 300.00, 3, '/imagenes/plan/plan-4.jpg', 1, 1),
+(5, 'Tonifica tu cuerpo', 'Programa estructurado de 4 semanas con clases en video para esculpir y tonificar tu cuerpo paso a paso.', 147.00, 4, '/imagenes/plan/plan-5.jpg', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -364,6 +386,12 @@ ALTER TABLE `clientes`
   ADD KEY `id_user` (`id_user`);
 
 --
+-- Indices de la tabla `condicion`
+--
+ALTER TABLE `condicion`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `configuracion`
 --
 ALTER TABLE `configuracion`
@@ -406,7 +434,8 @@ ALTER TABLE `pagos_planes`
 --
 ALTER TABLE `planes`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_user` (`id_user`);
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `condicion` (`condicion`);
 
 --
 -- Indices de la tabla `rutinas`
@@ -437,13 +466,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `asistencias`
 --
 ALTER TABLE `asistencias`
-  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `condicion`
+--
+ALTER TABLE `condicion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracion`
@@ -455,13 +490,13 @@ ALTER TABLE `configuracion`
 -- AUTO_INCREMENT de la tabla `detalle_planes`
 --
 ALTER TABLE `detalle_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `entrenador`
 --
 ALTER TABLE `entrenador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `metodo_pago`
@@ -473,31 +508,31 @@ ALTER TABLE `metodo_pago`
 -- AUTO_INCREMENT de la tabla `pagos_planes`
 --
 ALTER TABLE `pagos_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `planes`
 --
 ALTER TABLE `planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `rutinas`
 --
 ALTER TABLE `rutinas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `rutina_plan`
 --
 ALTER TABLE `rutina_plan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
@@ -539,7 +574,8 @@ ALTER TABLE `pagos_planes`
 -- Filtros para la tabla `planes`
 --
 ALTER TABLE `planes`
-  ADD CONSTRAINT `planes_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `planes_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `planes_ibfk_2` FOREIGN KEY (`condicion`) REFERENCES `condicion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `rutinas`

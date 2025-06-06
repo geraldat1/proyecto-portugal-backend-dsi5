@@ -25,7 +25,11 @@ exports.createPlan = (req, res) => {
 
 // Obtener todas las planes
 exports.getPlanes = (_req, res) => {
-  db.query("SELECT * FROM planes", (err, results) => {
+  db.query(`
+    SELECT p.*, c.nombre AS condicion_nombre 
+    FROM planes p
+    JOIN condicion c ON p.condicion = c.id
+  `, (err, results) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     res.status(200).json(results);
   });
@@ -34,10 +38,14 @@ exports.getPlanes = (_req, res) => {
 // Obtener plan por ID
 exports.getPlanById = (req, res) => {
   const { id } = req.params;
-  db.query("SELECT * FROM planes WHERE id = ?", [id], (err, results) => {
+  db.query(`
+    SELECT p.*, c.nombre AS condicion_nombre 
+    FROM planes p
+    JOIN condicion c ON p.condicion = c.id
+    WHERE p.id = ?
+  `, [id], (err, results) => {
     if (err) return res.status(500).json({ error: "Error en la base de datos" });
     if (results.length === 0) return res.status(404).json({ error: "Plan no encontrada" });
-
     res.status(200).json(results[0]);
   });
 };

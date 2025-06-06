@@ -1,7 +1,6 @@
 const db = require("../config/database");
 
 // Crear cliente
-// Crear cliente
 exports.createCliente = (req, res) => {
   const { dni, nombre, telefono, direccion } = req.body;
 

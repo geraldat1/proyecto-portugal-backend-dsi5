@@ -14,6 +14,8 @@ const pagosplanRoutes = require("./routes/pagos_plan.routes");
 const planRoutes = require("./routes/plan.routes");
 const rutinaRoutes = require("./routes/rutina.routes");
 const rutinaplanRoutes = require("./routes/rutina_plan.routes");
+const condicionRoutes = require("./routes/condicion.routes");
+
 
 const app = express();
 app.use(cors());
@@ -34,6 +36,7 @@ app.use("/api/v1", pagosplanRoutes);
 app.use("/api/v1", planRoutes);
 app.use("/api/v1", rutinaRoutes);
 app.use("/api/v1", rutinaplanRoutes);
+app.use("/api/v1", condicionRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
