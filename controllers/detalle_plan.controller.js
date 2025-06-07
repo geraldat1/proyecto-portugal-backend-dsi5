@@ -61,23 +61,38 @@ exports.getDetallePlanes = (_req, res) => {
   const dia = String(fechaObj.getDate()).padStart(2, "0");
   const fechaFormateada = `${anio}-${mes}-${dia}`;
 
-  // Actualizar estado = 0 si fecha_limite <= hoy
+  // Consulta para actualizar estado = 0 si la fecha_limite ya pasó
   const actualizarLimite = `
     UPDATE detalle_planes
     SET estado = 0
     WHERE fecha_limite <= ? AND estado != 0;
   `;
 
-  db.query(actualizarLimite, [fechaFormateada], (err) => {
-    if (err) return res.status(500).json({ error: "Error al actualizar estado límite" });
+  // Consulta para actualizar estado = 0 si el cliente (clientes.id) está inactivo (estado = 0)
+  const actualizarPorClienteInactivo = `
+    UPDATE detalle_planes dp
+    JOIN clientes c ON dp.id_cliente = c.id
+    SET dp.estado = 0
+    WHERE c.estado = 0 AND dp.estado != 0;
+  `;
 
-    // Obtener todos los registros luego de actualizar
-    db.query("SELECT * FROM detalle_planes", (err, results) => {
-      if (err) return res.status(500).json({ error: "Error en la base de datos" });
-      res.status(200).json(results);
+  // Ejecutar primero la actualización por fecha
+  db.query(actualizarLimite, [fechaFormateada], (err) => {
+    if (err) return res.status(500).json({ error: "Error al actualizar estado por fecha_limite" });
+
+    // Luego la actualización por cliente inactivo
+    db.query(actualizarPorClienteInactivo, (err2) => {
+      if (err2) return res.status(500).json({ error: "Error al actualizar estado por cliente inactivo" });
+
+      // Finalmente obtener todos los registros actualizados
+      db.query("SELECT * FROM detalle_planes", (err3, results) => {
+        if (err3) return res.status(500).json({ error: "Error al obtener registros" });
+        res.status(200).json(results);
+      });
     });
   });
 };
+
 
 // Obtener detalle_plan por ID (con datos del cliente y plan)
 exports.getDetallePlanById = (req, res) => {
@@ -89,22 +104,31 @@ exports.getDetallePlanById = (req, res) => {
       c.nombre AS cliente, 
       p.plan AS plan, 
       p.precio_plan, 
+      cond.nombre AS condicion_nombre,   -- cambiado aquí
       dp.fecha AS fecha_inicio, 
       dp.fecha_venc AS fecha_fin,
       dp.estado
     FROM detalle_planes dp
     INNER JOIN clientes c ON dp.id_cliente = c.id
     INNER JOIN planes p ON dp.id_plan = p.id
+    INNER JOIN condicion cond ON p.condicion = cond.id
     WHERE dp.id = ?
   `;
 
   db.query(query, [id], (err, results) => {
-    if (err) return res.status(500).json({ error: "Error en la base de datos" });
-    if (results.length === 0) return res.status(404).json({ error: "Detalle Plan no encontrado" });
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Error en la base de datos", detalle: err });
+    }
+    if (results.length === 0) {
+      return res.status(404).json({ error: "Detalle Plan no encontrado" });
+    }
 
     res.status(200).json(results[0]);
   });
 };
+
+
 
 // Actualizar detalle plan por ID
 exports.updateDetallePlan = (req, res) => {

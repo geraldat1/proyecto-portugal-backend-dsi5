@@ -52,11 +52,14 @@ exports.getPagosPlanes = (_req, res) => {
       clientes.nombre AS nombre_cliente,
       clientes.dni AS dni_cliente,
       planes.plan AS nombre_plan,
+      planes.condicion AS id_condicion,
+      condicion.nombre AS nombre_condicion,
       detalle_planes.fecha AS fecha_reg,
       detalle_planes.fecha_venc
     FROM pagos_planes
     JOIN clientes ON pagos_planes.id_cliente = clientes.id
     JOIN planes ON pagos_planes.id_plan = planes.id
+    JOIN condicion ON planes.condicion = condicion.id
     JOIN detalle_planes ON pagos_planes.id_detalle = detalle_planes.id
   `;
 
@@ -65,8 +68,6 @@ exports.getPagosPlanes = (_req, res) => {
     res.status(200).json(results);
   });
 };
-
-
 
 // Obtener pagos plan por ID (con nombre de cliente y nombre del plan)
 exports.getPagosPlanById = (req, res) => {
@@ -77,11 +78,14 @@ exports.getPagosPlanById = (req, res) => {
       clientes.nombre AS nombre_cliente,
       clientes.dni AS dni_cliente,
       planes.plan AS nombre_plan,
+      planes.condicion AS id_condicion,
+      condicion.nombre AS nombre_condicion,
       detalle_planes.fecha AS fecha_reg,
       detalle_planes.fecha_venc
     FROM pagos_planes
     JOIN clientes ON pagos_planes.id_cliente = clientes.id
     JOIN planes ON pagos_planes.id_plan = planes.id
+    JOIN condicion ON planes.condicion = condicion.id
     JOIN detalle_planes ON pagos_planes.id_detalle = detalle_planes.id
     WHERE pagos_planes.id = ?
   `;
