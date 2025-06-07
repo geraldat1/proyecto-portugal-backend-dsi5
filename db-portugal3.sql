@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-06-2025 a las 01:07:16
+-- Tiempo de generación: 07-06-2025 a las 12:49:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,7 +33,7 @@ CREATE TABLE `asistencias` (
   `hora_entrada` time NOT NULL,
   `hora_salida` time DEFAULT NULL,
   `id_detalle` int(11) NOT NULL,
-  `id_entrenador` int(11) NOT NULL,
+  `id_entrenador` int(11) DEFAULT NULL,
   `id_usuario` int(11) NOT NULL,
   `estado` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -47,7 +47,8 @@ INSERT INTO `asistencias` (`id_asistencia`, `fecha`, `hora_entrada`, `hora_salid
 (2, '2025-05-27', '08:30:00', '13:32:20', 2, 1, 1, 0),
 (3, '2025-05-27', '09:00:00', '14:01:23', 3, 2, 1, 0),
 (4, '2025-05-29', '09:30:00', '01:22:31', 4, 2, 1, 0),
-(5, '2025-05-29', '10:00:00', '01:22:26', 5, 3, 1, 0);
+(5, '2025-05-29', '10:00:00', '01:22:26', 5, 3, 1, 0),
+(7, '2025-06-07', '02:13:11', '02:41:16', 5, NULL, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -74,8 +75,8 @@ INSERT INTO `clientes` (`id`, `dni`, `nombre`, `telefono`, `direccion`, `fecha`,
 (1, '12345678', 'Juan Pérez', '987654323', 'Av. Arequipa 1234, Pucallpa', '2025-05-08 15:38:44', 1, 1),
 (2, '87654321', 'María Gómez', '987654321', 'Calle Los Olivos 567, Lima', '2025-05-08 15:38:49', 1, 1),
 (3, '23456789', 'Carlos Ruiz', '987654323', 'Jr. San Martín 890, Lima', '2025-04-29 13:28:48', 1, 1),
-(4, '34567890', 'Ana Torres', '987654324', 'Av. Javier Prado 456, Lima', '2025-04-29 13:28:48', 1, 1),
-(5, '45678901', 'Luis Fernández', '987654325', 'Calle La Paz 123, Lima', '2025-04-29 13:28:48', 1, 1);
+(4, '34567890', 'Ana Torres', '987654324', 'Av. Javier Prado 456, Lima', '2025-06-07 08:50:20', 0, 1),
+(5, '45678901', 'Luis Fernández', '987654325', 'Calle La Paz 123, Lima', '2025-06-07 09:06:40', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -151,7 +152,10 @@ INSERT INTO `detalle_planes` (`id`, `id_cliente`, `id_plan`, `fecha`, `hora`, `f
 (2, 2, 2, '2025-04-02', '08:30:00', '2026-04-02', '2026-04-12', 1, 0),
 (3, 3, 3, '2025-04-03', '09:00:00', '2026-04-03', '2026-04-15', 1, 1),
 (4, 4, 4, '2025-04-04', '09:30:00', '2026-04-04', '2026-04-20', 1, 0),
-(5, 5, 3, '2025-05-07', '15:46:22', '2026-04-05', '2026-04-25', 1, 1);
+(5, 5, 3, '2025-05-07', '15:46:22', '2026-04-05', '2026-04-25', 1, 0),
+(6, 1, 2, '2025-06-07', '04:07:11', '2025-07-07', '2025-07-09', 1, 1),
+(7, 2, 1, '2025-06-07', '03:28:35', '2025-06-08', '2025-06-10', 1, 2),
+(8, 4, 5, '2025-06-07', '01:58:30', '2026-06-07', '2026-06-09', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -233,7 +237,12 @@ INSERT INTO `pagos_planes` (`id`, `id_detalle`, `id_cliente`, `id_plan`, `precio
 (2, 2, 2, 2, 20.00, 1, '2025-04-02', '08:30:00', 1, 1),
 (3, 3, 3, 3, 100.00, 1, '2025-04-03', '09:00:00', 1, 1),
 (4, 4, 4, 4, 300.00, 1, '2025-04-04', '09:30:00', 1, 1),
-(5, 5, 5, 4, 139.00, 1, '2025-05-08', '10:17:40', 1, 1);
+(5, 5, 5, 4, 139.00, 1, '2025-05-08', '10:17:40', 1, 1),
+(6, 5, 5, 3, 100.00, 1, '2025-06-07', '01:50:36', 1, 1),
+(7, 8, 4, 5, 147.00, 2, '2025-06-07', '03:17:58', 1, 1),
+(8, 7, 2, 2, 40.00, 2, '2025-06-07', '03:18:15', 1, 1),
+(9, 6, 1, 5, 147.00, 1, '2025-06-07', '04:07:07', 1, 1),
+(10, 7, 2, 1, 55.00, 1, '2025-06-07', '04:10:51', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -257,11 +266,11 @@ CREATE TABLE `planes` (
 --
 
 INSERT INTO `planes` (`id`, `plan`, `descripcion`, `precio_plan`, `condicion`, `imagen`, `estado`, `id_user`) VALUES
-(1, 'Plan para adelgazar con Aerodance', 'Baile y aeróbicos para quemar calorías de forma divertida y efectiva.', 55.00, 1, '/imagenes/plan/plan-5.jpg', 1, 1),
-(2, 'Plan para mantenerse en forma con actividades variadas', 'Aerodance, pilates, yoga, GAP y más. Actividades variadas para mantenerte activo con energía.', 40.00, 2, '/imagenes/plan/plan-2.jpg', 1, 1),
-(3, 'Plan para empezar', 'Para quienes quieren empezar a hacer ejercicio de forma gradual y con motivación.', 100.00, 5, '/imagenes/plan/plan-3.jpeg', 1, 1),
-(4, 'Reto 30 días', 'Únete al reto y ponte en forma en tiempo récord con una rutina intensa y enfocada.', 300.00, 3, '/imagenes/plan/plan-4.jpg', 1, 1),
-(5, 'Tonifica tu cuerpo', 'Programa estructurado de 4 semanas con clases en video para esculpir y tonificar tu cuerpo paso a paso.', 147.00, 4, '/imagenes/plan/plan-5.jpg', 1, 1);
+(1, 'Plan Diario', 'Baile y aeróbicos para quemar calorías de forma divertida y efectiva.', 10.00, 1, '/imagenes/plan/plan-5.jpg', 1, 1),
+(2, 'Plan Mensual Basico', 'Aerodance, pilates, yoga, GAP y más. Actividades variadas para mantenerte activo con energía.', 50.00, 2, '/imagenes/plan/plan-2.jpg', 1, 1),
+(3, 'Plan Mensual Full', 'Para quienes quieren empezar a hacer ejercicio de forma gradual y con motivación.', 69.90, 2, '/imagenes/plan/plan-3.jpeg', 1, 1),
+(4, 'Plan Trimestral Basico', 'Únete al reto y ponte en forma en tiempo récord con una rutina intensa y enfocada.', 99.90, 3, '/imagenes/plan/plan-4.jpg', 1, 1),
+(5, 'Plan Anual Basico', 'Programa estructurado de 4 semanas con clases en video para esculpir y tonificar tu cuerpo paso a paso.', 299.90, 4, '/imagenes/plan/plan-5.jpg', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -362,7 +371,7 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `correo`, `clave`, `telefono`, `foto`, `rol`, `fecha`, `estado`) VALUES
 (1, 'admin', 'admin', 'admin@gmail.com', '$2b$10$C.1k1XxH24g96q.m7/sM0equMYFOkH7YDX8saCVPEpmSJYr6gNPNK', '987654325', 'user.png', '1', '2025-06-04 08:57:37', 1),
-(2, 'gerald_empleado', 'gerald', 'gerald@gmail.com', '$2b$10$QrohKpM9aw72.7QPMBMAb.BVUuvo7kaQ20EB8hnoryuZ.Stfmt4TG', '987654311', 'user.png', '2', '2025-06-04 09:12:24', 1),
+(2, 'gerald_empleado', 'gerald', 'gerald@gmail.com', '$2b$10$EP9qCO6NCHs9WYtb9nj/g.aCk56VgdQurjaPW96g1DuqsqHKOgWnG', '987654311', 'user.png', '2', '2025-06-07 07:52:08', 1),
 (3, 'andrea_empleada', 'andrea del pilar', 'andrea123@gmail.com', '$2b$10$xSEuywIKgR5SbLpxI09zu.LElVyT2dD3N8xr4BqUoi/TPNiQhqSqi', '987654321', 'user.png', '2', '2025-05-30 08:08:37', 0);
 
 --
@@ -466,7 +475,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `asistencias`
 --
 ALTER TABLE `asistencias`
-  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
@@ -490,7 +499,7 @@ ALTER TABLE `configuracion`
 -- AUTO_INCREMENT de la tabla `detalle_planes`
 --
 ALTER TABLE `detalle_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `entrenador`
@@ -508,7 +517,7 @@ ALTER TABLE `metodo_pago`
 -- AUTO_INCREMENT de la tabla `pagos_planes`
 --
 ALTER TABLE `pagos_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `planes`
