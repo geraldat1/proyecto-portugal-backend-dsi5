@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-06-2025 a las 12:49:54
+-- Tiempo de generación: 08-06-2025 a las 06:45:06
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -47,8 +47,7 @@ INSERT INTO `asistencias` (`id_asistencia`, `fecha`, `hora_entrada`, `hora_salid
 (2, '2025-05-27', '08:30:00', '13:32:20', 2, 1, 1, 0),
 (3, '2025-05-27', '09:00:00', '14:01:23', 3, 2, 1, 0),
 (4, '2025-05-29', '09:30:00', '01:22:31', 4, 2, 1, 0),
-(5, '2025-05-29', '10:00:00', '01:22:26', 5, 3, 1, 0),
-(7, '2025-06-07', '02:13:11', '02:41:16', 5, NULL, 1, 0);
+(5, '2025-05-29', '10:00:00', '01:22:26', 5, 3, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -150,12 +149,9 @@ CREATE TABLE `detalle_planes` (
 INSERT INTO `detalle_planes` (`id`, `id_cliente`, `id_plan`, `fecha`, `hora`, `fecha_venc`, `fecha_limite`, `id_user`, `estado`) VALUES
 (1, 1, 1, '2025-05-08', '13:40:48', '2026-04-01', '2026-04-23', 1, 0),
 (2, 2, 2, '2025-04-02', '08:30:00', '2026-04-02', '2026-04-12', 1, 0),
-(3, 3, 3, '2025-04-03', '09:00:00', '2026-04-03', '2026-04-15', 1, 1),
+(3, 3, 1, '2025-06-07', '15:46:16', '2025-06-08', '2025-06-10', 1, 2),
 (4, 4, 4, '2025-04-04', '09:30:00', '2026-04-04', '2026-04-20', 1, 0),
-(5, 5, 3, '2025-05-07', '15:46:22', '2026-04-05', '2026-04-25', 1, 0),
-(6, 1, 2, '2025-06-07', '04:07:11', '2025-07-07', '2025-07-09', 1, 1),
-(7, 2, 1, '2025-06-07', '03:28:35', '2025-06-08', '2025-06-10', 1, 2),
-(8, 4, 5, '2025-06-07', '01:58:30', '2026-06-07', '2026-06-09', 1, 0);
+(5, 5, 3, '2025-05-07', '15:46:22', '2026-04-05', '2026-04-25', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -188,7 +184,7 @@ INSERT INTO `entrenador` (`id`, `nombre`, `apellido`, `telefono`, `correo`, `dir
 (8, 'Lucía', 'Sánchez', '987654328', 'lucia.sanchez@gimnasiofitness.pe', 'Av. Tacna 345, Lima', 1),
 (9, 'Diego', 'Morales', '987654329', 'diego.morales@gimnasiofitness.pe', 'Calle San Juan 456, Lima', 1),
 (10, 'Valeria', 'Castro', '987654330', 'valeria.castro@gimnasiofitness.pe', 'Av. Pardo 567, Lima', 1),
-(11, 'Javier', 'Avila', '987654322', 'gerald@gmail.com', 'Jr. Tarapaca 187', 0);
+(11, 'Javier', 'Avila', '987654322', 'gerald@gmail.com', 'Jr. Tarapaca 187', 1);
 
 -- --------------------------------------------------------
 
@@ -237,12 +233,7 @@ INSERT INTO `pagos_planes` (`id`, `id_detalle`, `id_cliente`, `id_plan`, `precio
 (2, 2, 2, 2, 20.00, 1, '2025-04-02', '08:30:00', 1, 1),
 (3, 3, 3, 3, 100.00, 1, '2025-04-03', '09:00:00', 1, 1),
 (4, 4, 4, 4, 300.00, 1, '2025-04-04', '09:30:00', 1, 1),
-(5, 5, 5, 4, 139.00, 1, '2025-05-08', '10:17:40', 1, 1),
-(6, 5, 5, 3, 100.00, 1, '2025-06-07', '01:50:36', 1, 1),
-(7, 8, 4, 5, 147.00, 2, '2025-06-07', '03:17:58', 1, 1),
-(8, 7, 2, 2, 40.00, 2, '2025-06-07', '03:18:15', 1, 1),
-(9, 6, 1, 5, 147.00, 1, '2025-06-07', '04:07:07', 1, 1),
-(10, 7, 2, 1, 55.00, 1, '2025-06-07', '04:10:51', 1, 1);
+(5, 5, 5, 4, 139.00, 1, '2025-05-08', '10:17:40', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -266,11 +257,11 @@ CREATE TABLE `planes` (
 --
 
 INSERT INTO `planes` (`id`, `plan`, `descripcion`, `precio_plan`, `condicion`, `imagen`, `estado`, `id_user`) VALUES
-(1, 'Plan Diario', 'Baile y aeróbicos para quemar calorías de forma divertida y efectiva.', 10.00, 1, '/imagenes/plan/plan-5.jpg', 1, 1),
-(2, 'Plan Mensual Basico', 'Aerodance, pilates, yoga, GAP y más. Actividades variadas para mantenerte activo con energía.', 50.00, 2, '/imagenes/plan/plan-2.jpg', 1, 1),
-(3, 'Plan Mensual Full', 'Para quienes quieren empezar a hacer ejercicio de forma gradual y con motivación.', 69.90, 2, '/imagenes/plan/plan-3.jpeg', 1, 1),
-(4, 'Plan Trimestral Basico', 'Únete al reto y ponte en forma en tiempo récord con una rutina intensa y enfocada.', 99.90, 3, '/imagenes/plan/plan-4.jpg', 1, 1),
-(5, 'Plan Anual Basico', 'Programa estructurado de 4 semanas con clases en video para esculpir y tonificar tu cuerpo paso a paso.', 299.90, 4, '/imagenes/plan/plan-5.jpg', 1, 1);
+(1, 'Plan Diario', 'Acceso total al gimnasio por 1 día.\n\n', 10.00, 1, '/imagenes/plan/plan1.jpg', 1, 1),
+(2, 'Plan Mensual Basico', 'Acceso a máquinas de musculación y cardio, Horarios regulares.', 50.00, 2, '/imagenes/plan/plan4.jpg', 1, 1),
+(3, 'Plan Mensual Full', 'Acceso total a todas las áreas del gimnasio, Clases dirigidas (zumba, funcional, spinning, etc.), Asesoría básica de un entrenador.', 69.90, 2, '/imagenes/plan/plan5.jpg', 1, 1),
+(4, 'Plan Trimestral Basico', 'Acceso a zonas básicas del gimnasio por 3 meses, Horarios regulares.', 99.90, 3, '/imagenes/plan/plan3.jpg', 1, 1),
+(5, 'Plan Anual Full', 'Acceso total a todas las áreas del gimnasio, Clases grupales ilimitadas, Zona funcional, Asesoría de entrenamiento, Beneficios exclusivos por fidelidad.', 299.90, 4, '/imagenes/plan/plan2.jpg', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -475,73 +466,73 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `asistencias`
 --
 ALTER TABLE `asistencias`
-  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_asistencia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
 --
 ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `condicion`
 --
 ALTER TABLE `condicion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `configuracion`
 --
 ALTER TABLE `configuracion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_planes`
 --
 ALTER TABLE `detalle_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `entrenador`
 --
 ALTER TABLE `entrenador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `metodo_pago`
 --
 ALTER TABLE `metodo_pago`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `pagos_planes`
 --
 ALTER TABLE `pagos_planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `planes`
 --
 ALTER TABLE `planes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `rutinas`
 --
 ALTER TABLE `rutinas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `rutina_plan`
 --
 ALTER TABLE `rutina_plan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas

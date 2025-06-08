@@ -61,38 +61,51 @@ exports.getDetallePlanes = (_req, res) => {
   const dia = String(fechaObj.getDate()).padStart(2, "0");
   const fechaFormateada = `${anio}-${mes}-${dia}`;
 
-  // Consulta para actualizar estado = 0 si la fecha_limite ya pasó
+// Primero establecer estado = 1 si la fecha_venc ya pasó o es hoy
+const actualizarVencimiento = `
+  UPDATE detalle_planes
+  SET estado = 1
+  WHERE DATE(fecha_venc) <= ? AND estado != 1;
+`;
+
+
+  // Luego actualizar estado = 0 si la fecha_limite ya pasó (días después del vencimiento)
   const actualizarLimite = `
     UPDATE detalle_planes
     SET estado = 0
-    WHERE fecha_limite <= ? AND estado != 0;
+    WHERE DATE(fecha_limite) < ? AND estado != 0;
   `;
 
   // Consulta para actualizar estado = 0 si el cliente (clientes.id) está inactivo (estado = 0)
   const actualizarPorClienteInactivo = `
     UPDATE detalle_planes dp
-    JOIN clientes c ON dp.id_cliente = c.id
+    INNER JOIN clientes c ON dp.id_cliente = c.id
     SET dp.estado = 0
     WHERE c.estado = 0 AND dp.estado != 0;
   `;
 
-  // Ejecutar primero la actualización por fecha
-  db.query(actualizarLimite, [fechaFormateada], (err) => {
-    if (err) return res.status(500).json({ error: "Error al actualizar estado por fecha_limite" });
+// Ejecutar primero la actualización por fecha_venc ya pasada o igual a hoy
+db.query(actualizarVencimiento, [fechaFormateada], (err1) => {
+  if (err1) return res.status(500).json({ error: "Error al actualizar estado por fecha_venc: " + err1.message });
+
+  // Luego la actualización por fecha_limite pasada
+  db.query(actualizarLimite, [fechaFormateada], (err2) => {
+    if (err2) return res.status(500).json({ error: "Error al actualizar estado por fecha_limite: " + err2.message });
 
     // Luego la actualización por cliente inactivo
-    db.query(actualizarPorClienteInactivo, (err2) => {
-      if (err2) return res.status(500).json({ error: "Error al actualizar estado por cliente inactivo" });
+    db.query(actualizarPorClienteInactivo, (err3) => {
+      if (err3) return res.status(500).json({ error: "Error al actualizar estado por cliente inactivo: " + err3.message });
 
       // Finalmente obtener todos los registros actualizados
-      db.query("SELECT * FROM detalle_planes", (err3, results) => {
-        if (err3) return res.status(500).json({ error: "Error al obtener registros" });
+      db.query("SELECT * FROM detalle_planes", (err4, results) => {
+        if (err4) return res.status(500).json({ error: "Error al obtener registros: " + err4.message });
         res.status(200).json(results);
       });
     });
   });
-};
+});
 
+};
 
 // Obtener detalle_plan por ID (con datos del cliente y plan)
 exports.getDetallePlanById = (req, res) => {
