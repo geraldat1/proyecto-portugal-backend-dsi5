@@ -5,15 +5,16 @@ exports.createAsistencia = (req, res) => {
   const { id_detalle, id_entrenador } = req.body;
 
   // Validación modificada para permitir id_entrenador = 0
-  if (!id_detalle || id_entrenador === undefined || id_entrenador === null) {
-    return res.status(400).json({
-      error: "Datos incompletos",
-      details: {
-        id_detalle: !id_detalle ? "Falta id_detalle" : null,
-        id_entrenador: (id_entrenador === undefined || id_entrenador === null) ? "Falta id_entrenador" : null
-      }
-    });
-  }
+if (!id_detalle || id_entrenador === undefined) {
+  return res.status(400).json({
+    error: "Datos incompletos",
+    details: {
+      id_detalle: !id_detalle ? "Falta id_detalle" : null,
+      id_entrenador: id_entrenador === undefined ? "Falta id_entrenador" : null
+    }
+  });
+}
+
 
   if (!req.user || !req.user.id) {
     return res.status(401).json({
@@ -101,7 +102,7 @@ exports.getAsistenciaById = (req, res) => {
       c.nombre AS nombre_cliente, 
       p.plan AS nombre_plan,
       CASE 
-        WHEN a.id_entrenador = 0 THEN 'Sin entrenador'
+        WHEN a.id_entrenador IS NULL THEN 'Sin entrenador'
         ELSE CONCAT(e.nombre, ' ', e.apellido)
       END AS nombre_entrenador
     FROM asistencias a
@@ -143,7 +144,8 @@ exports.updateAsistencia = (req, res) => {
     });
   }
 
-  // Verificar primero si la asistencia existe
+  const finalEntrenadorId = id_entrenador === 0 ? null : id_entrenador;
+
   db.query(
     `SELECT id_asistencia FROM asistencias WHERE id_asistencia = ?`,
     [id_asistencia],
@@ -151,12 +153,11 @@ exports.updateAsistencia = (req, res) => {
       if (err) return res.status(500).json({ error: "Error en la base de datos" });
       if (results.length === 0) return res.status(404).json({ error: "Asistencia no encontrada" });
 
-      // Actualizar sin restricciones en id_entrenador (puede ser cualquier número, incluyendo 0)
       db.query(
         `UPDATE asistencias 
          SET hora_entrada = ?, hora_salida = ?, id_detalle = ?, id_entrenador = ?, id_usuario = ?, estado = ? 
          WHERE id_asistencia = ?`,
-        [hora_entrada, hora_salida, id_detalle, id_entrenador, id_usuario, estado, id_asistencia],
+        [hora_entrada, hora_salida, id_detalle, finalEntrenadorId, id_usuario, estado, id_asistencia],
         (err, result) => {
           if (err) return res.status(500).json({ error: "Error en la base de datos" });
           if (result.affectedRows === 0) return res.status(404).json({ error: "Asistencia no encontrada" });
